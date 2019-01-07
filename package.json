@@ -1,0 +1,29 @@
+{
+  "name": "stackoverflow-lite-react-frontend-app",
+  "version": "1.0.0",
+  "description": "React Frontend Implementation of StackOverFlow-Lite App",
+  "main": "index.js",
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.2.3",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "babel-plugin-transform-object-rest-spread": "^7.0.0-beta.3"
+  },
+  "dependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/augustineezinwa/StackOverFlow-Lite-React-Frontend-App.git"
+  },
+  "author": "Augustine Ezinwa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/augustineezinwa/StackOverFlow-Lite-React-Frontend-App/issues"
+  },
+  "homepage": "https://github.com/augustineezinwa/StackOverFlow-Lite-React-Frontend-App#readme"
+}
