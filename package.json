@@ -49,8 +49,11 @@
     "webpack-merge": "^4.2.1"
   },
   "scripts": {
+    "start": "node server",
     "start:dev": "webpack-dev-server --mode development --open",
     "start:prod": "npm run heroku-postbuild && npm run start",
+    "clean": "rm -rf dist",
+    "heroku-postbuild": "npm run clean && npm run build",
     "build": "webpack --mode production",
     "test": "jest --coverage --config ./jest.config.json --updateSnapshot ",
     "coveralls": "cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
@@ -68,6 +71,7 @@
   "dependencies": {
     "acorn": "^6.0.5",
     "dotenv": "^6.2.0",
+    "express": "^4.16.4",
     "font-awesome": "^4.7.0",
     "path": "^0.12.7",
     "react": "^16.7.0",
