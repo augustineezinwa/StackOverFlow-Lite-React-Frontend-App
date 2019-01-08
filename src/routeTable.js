@@ -3,6 +3,7 @@ import LoginPage from './components/login/LoginPage';
 import SignupPage from './components/signup/SignupPage';
 import QuestionPage from './components/questions/QuestionPage';
 import ProfilePage from './components/profile/ProfilePage';
+import AskPage from './components/ask/AskPage';
 
 const routeTable = [
   {
@@ -28,6 +29,12 @@ const routeTable = [
   {
     path: '/profile',
     component: ProfilePage,
+    exact: true
+
+  },
+  {
+    path: '/ask',
+    component: AskPage,
     exact: true
 
   }

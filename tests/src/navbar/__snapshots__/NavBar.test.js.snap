@@ -32,24 +32,30 @@ exports[`Navbar tests 1`] = `
   <div
     className="nav-links"
   >
-    <a
-      href="/#"
+    <NavLink
+      activeClassName="active"
+      aria-current="page"
       id="homeLink"
+      to="/"
     >
       Home
-    </a>
-    <a
-      href="/#ask"
+    </NavLink>
+    <NavLink
+      activeClassName="active"
+      aria-current="page"
       id="askLink"
+      to="/ask"
     >
       AskQuestion
-    </a>
-    <a
-      href="/#profile"
+    </NavLink>
+    <NavLink
+      activeClassName="active"
+      aria-current="page"
       id="profileLink"
+      to="/profile"
     >
       My Profile
-    </a>
+    </NavLink>
     <div
       className="search-bar"
     >
@@ -65,24 +71,30 @@ exports[`Navbar tests 1`] = `
         Search
       </button>
     </div>
-    <a
-      href="/#signup"
+    <NavLink
+      activeClassName="active"
+      aria-current="page"
       id="signupLink"
+      to="/signup"
     >
       signup
-    </a>
-    <a
-      href="/#login"
+    </NavLink>
+    <NavLink
+      activeClassName="active"
+      aria-current="page"
       id="loginLink"
+      to="/login"
     >
       login
-    </a>
-    <a
-      href="/#logout"
+    </NavLink>
+    <NavLink
+      activeClassName="active"
+      aria-current="page"
       id="logoutLink"
+      to="/logout"
     >
       Logout
-    </a>
+    </NavLink>
   </div>
 </div>
 `;
