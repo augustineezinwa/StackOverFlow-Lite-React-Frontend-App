@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App tests 1`] = `
+<div
+  className="container footer"
+  id="footer"
+>
+  © 2018 StackOverFlow-Lite
+</div>
+`;
