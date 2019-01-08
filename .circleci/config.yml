@@ -6,7 +6,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: install packages
+          name: install npm packages
           command: npm install
   test:
     docker:
@@ -14,11 +14,14 @@ jobs:
     steps:
       - checkout
       - run:
-          name: install packages
+          name: install npm packages
           command: npm install
       - run:
           name: Run tests
           command: npm test
+      - run: 
+          name: Generate coverage
+          command: npm run coveralls
 
 workflows:
   version: 2
