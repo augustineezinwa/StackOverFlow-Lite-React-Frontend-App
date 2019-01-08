@@ -19,6 +19,9 @@ jobs:
       - run:
           name: Run tests
           command: npm test
+      - run:
+          name: Generate coverage
+          command: npm run coveralls
 
 workflows:
   version: 2
