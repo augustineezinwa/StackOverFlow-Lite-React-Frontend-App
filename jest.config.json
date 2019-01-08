@@ -1,7 +1,10 @@
 {
   "collectCoverage": true,
+  "collectCoverageFrom": [
+    "<rootDir>/src/**.js"
+  ],
   "setupFiles": [
-    "./tests/settings/setupTestsConfig.js"
+    "./tests/support/setupTestsConfig.js"
   ],
   "snapshotSerializers": [
     "enzyme-to-json/serializer"

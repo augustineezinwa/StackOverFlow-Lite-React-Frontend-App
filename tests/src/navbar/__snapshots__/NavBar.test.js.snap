@@ -1,0 +1,88 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Navbar tests 1`] = `
+<div
+  className="nav"
+  id="navbar"
+>
+  <div
+    className="nav-header"
+  >
+    <div
+      className="nav-title"
+    >
+      StackOverFlow-Lite
+    </div>
+  </div>
+  <div
+    className="nav-btn"
+  >
+    <label
+      htmlFor="nav-check"
+    >
+      <span />
+      <span />
+      <span />
+    </label>
+  </div>
+  <input
+    id="nav-check"
+    type="checkbox"
+  />
+  <div
+    className="nav-links"
+  >
+    <a
+      href="/#"
+      id="homeLink"
+    >
+      Home
+    </a>
+    <a
+      href="/#ask"
+      id="askLink"
+    >
+      AskQuestion
+    </a>
+    <a
+      href="/#profile"
+      id="profileLink"
+    >
+      My Profile
+    </a>
+    <div
+      className="search-bar"
+    >
+      <input
+        id="searchBox"
+        type="search"
+      />
+       
+      <button
+        id="searchButton"
+        type="button"
+      >
+        Search
+      </button>
+    </div>
+    <a
+      href="/#signup"
+      id="signupLink"
+    >
+      signup
+    </a>
+    <a
+      href="/#login"
+      id="loginLink"
+    >
+      login
+    </a>
+    <a
+      href="/#logout"
+      id="logoutLink"
+    >
+      Logout
+    </a>
+  </div>
+</div>
+`;
