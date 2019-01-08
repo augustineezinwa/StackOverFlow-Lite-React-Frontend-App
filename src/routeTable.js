@@ -2,6 +2,7 @@ import HomePage from './components/homepage/HomePage';
 import LoginPage from './components/login/LoginPage';
 import SignupPage from './components/signup/SignupPage';
 import QuestionPage from './components/questions/QuestionPage';
+import ProfilePage from './components/profile/ProfilePage';
 
 const routeTable = [
   {
@@ -23,6 +24,12 @@ const routeTable = [
     path: '/question',
     component: QuestionPage,
     exact: true
+  },
+  {
+    path: '/profile',
+    component: ProfilePage,
+    exact: true
+
   }
 ];
 
