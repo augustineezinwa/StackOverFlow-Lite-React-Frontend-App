@@ -1,3 +1,6 @@
 node_modules
 coverage
 dist
+
+tests/__snapshots__
+tests/**/__snapshots__
