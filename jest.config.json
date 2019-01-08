@@ -1,4 +1,5 @@
 {
+  "collectCoverage": true,
   "setupFiles": [
     "./tests/settings/setupTestsConfig.js"
   ],
