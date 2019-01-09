@@ -1,6 +1,6 @@
 node_modules
 coverage
 dist
-
+env
 tests/__snapshots__
 tests/**/__snapshots__

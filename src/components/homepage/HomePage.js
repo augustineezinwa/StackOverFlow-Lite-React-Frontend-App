@@ -1,12 +1,23 @@
 import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+import QuestionCard from './QuestionCard';
+import { fetchQuestions } from '../../actions/fetchQuestionsActions';
 
-class HomePage extends Component {
+export class HomePage extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+    };
+  }
+
+  componentDidMount() {
+    const { fetchAllQuestions } = this.props;
+    fetchAllQuestions();
   }
 
   render() {
+    const { questions } = this.props;
+
     return (
       <Fragment>
         <div id="pageDisplay">
@@ -25,40 +36,71 @@ class HomePage extends Component {
           <div className="container dashboardfooter " id="dashBoardTitle"><h3>Trending Questions</h3></div>
 
           <div id="questionsDisplay">
-            <div className="container">
-              <div className="row no-questions">
 
-                <div className="alignCardWidth">
-                  <div className="card">
-                    <div className="container">
-                      <div className="row mt-4 pd-1">
-                        <div className="col-2">
-                          <div className="symbol-display">
-                            <div className="alignSymbol">!</div>
+            {
+              !questions.length && (
+                <div className="container">
+                  <div className="row no-questions">
+
+                    <div className="alignCardWidth">
+                      <div className="card">
+                        <div className="container">
+                          <div className="row mt-4 pd-1">
+                            <div className="col-2">
+                              <div className="symbol-display">
+                                <div className="alignSymbol">!</div>
+                              </div>
+
+                            </div>
+                            <div className="col-5">
+                              <div className="question">No Questions yet!  &nbsp; Refresh page  </div>
+
+                            </div>
+                          </div>
+
+                          <div className="col" style={{ textAlign: 'right' }}>
+                            <span />
+                            <span />
+                            <a href="/">
+                              <button type="answer">Refresh</button>
+                            </a>
+
                           </div>
 
                         </div>
-                        <div className="col-5">
-                          <div className="question">No Questions yet!  &nbsp; Refresh page  </div>
-
-                        </div>
                       </div>
-
-                      <div className="col" style={{ textAlign: 'right' }}>
-                        <span />
-                        <span />
-                        <a href="/">
-                          <button type="answer">Refresh</button>
-                        </a>
-
-                      </div>
-
                     </div>
+
                   </div>
                 </div>
+              )
+            }
+            {
+              questions.length && (
+                <div
+                  id="main-fish"
+                  className="maincont"
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(3, 1fr)',
+                    gridGap: '10px',
+                    gridAutoRows: 'minMax(100px, auto)'
+                  }}>
+                  {questions.map(x => (
+                    <div className="row" key={x.id}>
+                      <QuestionCard
+                        key={x.id}
+                        questionTitle={x.questionTitle}
+                        questionId={x.id}
+                        answerNumber={x.numberOfAnswers}
+                        totalUpVotes={x.upvotes}
+                        totalDownVotes={x.downvotes} />
+                    </div>
+                  ))}
+                </div>
+              )
+            }
 
-              </div>
-            </div>
 
           </div>
         </div>
@@ -67,4 +109,13 @@ class HomePage extends Component {
   }
 }
 
-export default HomePage;
+
+export const mapStateToProps = state => ({
+  questions: state.questions.data
+});
+
+const mapActionsToProps = {
+  fetchAllQuestions: fetchQuestions
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(HomePage);
