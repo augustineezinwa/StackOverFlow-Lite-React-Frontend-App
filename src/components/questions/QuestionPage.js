@@ -1,188 +1,139 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { fetchAQuestion } from '../../actions/fetchAQuestionAction';
+import { fetchUsers } from '../../actions/fetchUsersActions';
+import AnswerList from './AnswerList';
+import findData from '../../utils/findData';
 
-const QuestionPage = () => (
-  <Fragment>
-    <div className="container question-background ">
-      <div className="row ">
-        <div className="col">
-          <div className="question-card">
-            <h2>My Android refuses to run its latest version ?</h2>
-            <div className="underline">&nbsp;</div>
-            <div className="row">
-              <div className="col-5">
-                My android device is not responding since I installed its latest operating system
-                <div className="mt-4 ft">
-                  Asked by Augustine Ezinwa  &nbsp;
-                  {' '}
-                  <span className="darkgray"> 15 mins ago</span>
-                </div>
-              </div>
-              <div className="col-2">
-                <div className="row">
-                  <div className="col"> 20 upvotes</div>
-                  <div className="col">1 downvotes</div>
-                </div>
-              </div>
-            </div>
+export class QuestionPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+  }
 
-            <div>&nbsp;</div>
-            <div className="underline;">&nbsp;</div>
+  componentDidMount() {
+    const { match, fetchQuestion, fetchAllUserData, history } = this.props;
+    fetchQuestion(match.params.questionId, history);
+    fetchAllUserData();
+  }
 
-            <div className="">
-              {' '}
-              <h3>3 Answers</h3>
-            </div>
 
-            <div className="underline">&nbsp;</div>
-            <div className="row">
-              <div className="col-5">
-                Consider resetting your device to factory settings.
-                <div className="row mt-4">
-                  <div className="col">
-                    <div className="ft">
-                      Answered by Augustine Ezinwa  &nbsp;
-                      {' '}
-                      <span className="darkgray">15 mins ago</span>
-                    </div>
-
-                  </div>
-                  <div className="col ">
-                    <div className="row">
-                      <div className="col">
+  render() {
+    const { question, users } = this.props;
+    if (question.answers && users.length) {
+      const calcVotes = (votes) => {
+        let i = 0;
+        question.answers.forEach((x) => { i += x[votes]; });
+        return i;
+      };
+      return (
+        <Fragment>
+          <div className="container question-background ">
+            <div className="row ">
+              <div className="col">
+                <div className="question-card">
+                  <h2>{question.questionTitle}</h2>
+                  <div className="underline">&nbsp;</div>
+                  <div className="row">
+                    <div className="col-5">
+                      {question.questionDescription}
+                      <div className="mt-4 ft">
+                        Asked by
                         {' '}
-                        <a href="" id="fish">
-                          <button type="comment">
-                            Comment
-                          </button>
-                        </a>
-                      </div>
-
-                      <div className="col">
+                        {findData(users, 'id', question.userId, 'fullName')}
                         {' '}
-                        <div className="darkgray">View Comments </div>
+                        &nbsp;
+                        {' '}
+                        <span className="darkgray">{question.time}</span>
                       </div>
-
                     </div>
+                    <div className="col-2">
+                      <div className="row">
+                        <div className="col">
+                          {calcVotes('upvotes')}
+                          {' '}
+                          upvotes
 
-                  </div>
-
-
-                </div>
-              </div>
-              <div className="col-2">
-                <div className="row">
-                  <div className="col"> 20 upvotes</div>
-                  <div className="col">1 downvotes</div>
-                </div>
-
-                <div className="row">
-                  <div className="col">
-                    <span>
-                      {' '}
-                      <i className="fas fa-thumbs-up blue resize" />
-                    </span>
-
-                  </div>
-                  <div className="col">
-                    <span>
-                      {' '}
-                      <i className="fas fa-star blue resize" />
-                    </span>
-
-                  </div>
-                  <div className="col">
-                    <span>
-                      {' '}
-                      <i className="fas fa-thumbs-down blue resize" />
-                    </span>
-
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-
-            <div>&nbsp;</div>
-
-            <div className="underline">&nbsp;</div>
-
-            <div className="row">
-              <div className="col-5">
-                Consider resetting your device to factory settings.
-                <div className="row mt-4">
-                  <div className="col">
-                    <div className="ft">
-                      Answered by Augustine Ezinwa  &nbsp;
-                      {' '}
-                      <span className="darkgray">15 mins ago</span>
-                    </div>
-
-                  </div>
-                  <div className="col ">
-                    <div className="row">
-                      <div className="col">
-                        <button type="comment">Comment</button>
-
+                        </div>
+                        <div className="col">
+                          {calcVotes('downvotes')}
+                          {' '}
+                          downvotes
+                        </div>
                       </div>
-
-                      <div className="col darkgray">  View Comments </div>
-
                     </div>
-
                   </div>
 
+                  <div>&nbsp;</div>
+                  <div className="underline;">&nbsp;</div>
 
-                </div>
-              </div>
-              <div className="col-2">
-                <div className="row">
-                  <div className="col"> 20 upvotes</div>
-                  <div className="col">1 downvotes</div>
-                </div>
-
-                <div className="row">
-                  <div className="col">
-                    <span>
+                  <div className="">
+                    {' '}
+                    <h3>
+                      {question.answers ? question.answers.length : 0}
                       {' '}
-                      <i className="fas fa-thumbs-up blue resize" />
-                    </span>
-
+                      {question.answers.length > 1 ? 'Answers' : 'Answer' }
+                    </h3>
                   </div>
-                  <div className="col">
-                    <span>
-                      {' '}
-                      <i className="fas fa-star blue resize" />
-                    </span>
 
-                  </div>
-                  <div className="col">
-                    <span>
-                      {' '}
-                      <i className="fas fa-thumbs-down blue resize" />
-                    </span>
+                  <div className="underline">&nbsp;</div>
 
-                  </div>
+                  {question.answers && (
+                    question.answers.map(x => (
+                      <AnswerList
+                      key={x.id}
+                      answer={x.answer}
+                      upvotes={x.upvotes}
+                      downvotes={x.downvotes}
+                      time={x.time}
+                      date={x.date}
+                      name={findData(users, 'id', x.userId, 'fullName')}
+                     />
+                    ))
+                  )}
+
+                  <div>&nbsp;</div>
+                  <div>&nbsp;</div>
+
+                  <form className="">
+
+                    <label htmlFor="password"><b>Add an answer</b></label>
+                    <textarea className="mt-2 txtarea" required style={{ fontSize: '1em', padding: '1em' }} />
+
+                    <button type="submit"> Add</button>
+                  </form>
                 </div>
               </div>
             </div>
 
-            <div>&nbsp;</div>
-
-            <div className="underline">&nbsp;</div>
-            <form className="">
-
-              <label htmlFor="password"><b>Add an answer</b></label>
-              <textarea className="mt-2 txtarea" required />
-
-              <button type="submit"> Add</button>
-            </form>
           </div>
-        </div>
-      </div>
+        </Fragment>
+      );
+    }
+    return null;
+  }
+}
 
-    </div>
-  </Fragment>
-);
+const mapStateToProps = state => ({
+  question: state.question.data,
+  users: state.users.data
+});
 
-export default QuestionPage;
+const mapActionsToProps = {
+  fetchQuestion: fetchAQuestion,
+  fetchAllUserData: fetchUsers,
+};
+
+
+QuestionPage.propTypes = {
+  question: PropTypes.array.isRequired,
+  users: PropTypes.array.isRequired,
+  fetchAllUserData: PropTypes.func.isRequired,
+  fetchQuestion: PropTypes.func.isRequired,
+  match: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(QuestionPage);

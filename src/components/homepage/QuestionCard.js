@@ -56,7 +56,7 @@ const QuestionCard = ({
             <div className="col">
               <span />
               <span />
-              <NavLink to="">
+              <NavLink to={`/question/${questionId}`}>
                 <button className="viewButton" key={questionId} type="answer">View</button>
 
               </NavLink>

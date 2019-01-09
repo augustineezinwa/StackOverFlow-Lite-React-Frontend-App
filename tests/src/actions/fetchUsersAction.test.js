@@ -2,7 +2,7 @@ import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
 import configureMockStore from 'redux-mock-store';
 
-import { fetchQuestionSuccess, fetchQuestonFailure, fetchQuestions } from '../../../src/actions/fetchQuestionsActions';
+import { fetchUserFailure, fetchUserSuccess, fetchUsers } from '../../../src/actions/fetchUsersActions';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -11,47 +11,48 @@ afterEach(() => {
   fetchMock.restore();
 });
 
-test('fetch question async action should trigger the following set of actions', () => {
+test('fetch user async action should trigger the following set of actions', () => {
   const recievedData = {
     status: 'success',
     data: {
-      questions: [
-
-        {
-          id: 4,
-          questionTitle: 'any questions today',
-          questionDescription: 'I need questions , so guys feel free to do so, aight',
-          answers: [],
-          numberOfAnswers: 0,
-          upvotes: 0,
-          downvotes: 0,
-          time: '23:00:16 GMT+0000 (UTC)',
-          date: 'Sat Jan 05 2019',
-          userId: 5
-        },
+      users: [
         {
           id: 1,
-          questionTitle: 'fdsdafdsasf',
-          questionDescription: 'fdsafsafasfdsa',
-          answers: [],
-          numberOfAnswers: 1,
-          upvotes: 0,
-          downvotes: 0,
-          time: '10:21:01 GMT+0000 (UTC)',
-          date: 'Thu Nov 15 2018',
-          userId: 1
+          fullName: 'hyfghdhhhhhhhhhhhhhhhhh jjjdjdj',
+          jobRole: 'Update your job role',
+          company: 'Update your company name',
+          photo: 'image-url',
+          numberOfAnswers: 0,
+          earnedUpvotes: 0,
+          earnedDownvotes: 0,
+          numberOfQuestions: 1,
+          time: '10:20:49 GMT+0000 (UTC)',
+          date: 'Thu Nov 15 2018'
+        },
+        {
+          id: 3,
+          fullName: 'abiodun abudu',
+          jobRole: 'Update your job role',
+          company: 'Update your company name',
+          photo: 'https://x.y.z',
+          numberOfAnswers: 0,
+          earnedUpvotes: 0,
+          earnedDownvotes: 0,
+          numberOfQuestions: 0,
+          time: '17:11:43 GMT+0000 (UTC)',
+          date: 'Mon Nov 26 2018'
         }
       ]
     }
   };
-  fetchMock.get(`${process.env.APP_BASE_URL}/questions`, recievedData);
+  fetchMock.get(`${process.env.APP_BASE_URL}/users`, recievedData);
 
   const store = mockStore({});
 
   const expectedActions = [{
     payload: {
       isLoading: true,
-      message: 'Loading StackOverFlow-Lite'
+      message: 'Loading data...'
     },
     type: 'LOADING_TRUE'
   },
@@ -64,12 +65,12 @@ test('fetch question async action should trigger the following set of actions', 
   },
   {
     payload: {
-      data: recievedData.data.questions
+      data: recievedData.data.users
     },
-    type: 'FETCH_QUESTIONS_SUCCESS'
+    type: 'FETCH_USERS_SUCCESS'
   }
   ];
-  return store.dispatch(fetchQuestions())
+  return store.dispatch(fetchUsers())
     .then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
@@ -90,8 +91,8 @@ test('fetch question success actions should trigger the expected action', () => 
       userId: 5
     }
   ];
-  expect(fetchQuestionSuccess(data)).toEqual({
-    type: 'FETCH_QUESTIONS_SUCCESS',
+  expect(fetchUserSuccess(data)).toEqual({
+    type: 'FETCH_USERS_SUCCESS',
     payload: { data }
   });
 });
@@ -99,8 +100,8 @@ test('fetch question success actions should trigger the expected action', () => 
 
 test('fetch question failure actions should trigger the expected action', () => {
   const err = { err: 'I have err' };
-  expect(fetchQuestonFailure(err)).toEqual({
-    type: 'FETCH_QUESTIONS_FAILURE',
+  expect(fetchUserFailure(err)).toEqual({
+    type: 'FETCH_USERS_FAILURE',
     payload: { errors: err }
   });
 });
