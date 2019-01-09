@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import QuestionCard from './QuestionCard';
 import { fetchQuestions } from '../../actions/fetchQuestionsActions';
@@ -117,5 +118,12 @@ export const mapStateToProps = state => ({
 const mapActionsToProps = {
   fetchAllQuestions: fetchQuestions
 };
+
+
+HomePage.propTypes = {
+  fetchAllQuestions: PropTypes.func.isRequired,
+  questions: PropTypes.object.isRequired,
+};
+
 
 export default connect(mapStateToProps, mapActionsToProps)(HomePage);

@@ -22,7 +22,7 @@ const routeTable = [
     exact: true
   },
   {
-    path: '/question',
+    path: '/question/:questionId',
     component: QuestionPage,
     exact: true
   },

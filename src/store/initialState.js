@@ -10,5 +10,13 @@ export default {
   notifications: {
     status: false,
     message: ''
+  },
+  users: {
+    data: [],
+    errors: {}
+  },
+  question: {
+    data: [],
+    errors: {}
   }
 };
