@@ -58,6 +58,7 @@ export class SignupPage extends Component {
   }
 
   render() {
+    const { history, isLoggedIn } = this.props;
     const {
       fullName,
       email,
@@ -68,6 +69,7 @@ export class SignupPage extends Component {
       passwordError,
       confirmPasswordError
     } = this.state;
+    if (isLoggedIn) history.push('/');
     return (
       <Fragment>
         <div className="container image-background ask-bg " id="ask-bg" style={{ margin: '0 auto' }}>

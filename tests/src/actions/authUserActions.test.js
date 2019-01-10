@@ -2,7 +2,9 @@ import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
 import configureMockStore from 'redux-mock-store';
 
-import { authUser, authUserFailure, authUserSuccess } from '../../../src/actions/authUserActions';
+import {
+ authUser, loginUser, authUserFailure, authUserSuccess 
+} from '../../../src/actions/authUserActions';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -11,7 +13,7 @@ afterEach(() => {
   fetchMock.restore();
 });
 
-test('fetch user async action should trigger the following set of actions', () => {
+test('auth user async action should trigger the following set of actions', () => {
   const recievedData = {
     status: 'success',
     isLoggedIn: true
@@ -55,9 +57,54 @@ test('fetch user async action should trigger the following set of actions', () =
     });
 });
 
+
+test('login user async action should trigger the following set of actions', () => {
+  const recievedData = {
+    status: 'success',
+    isLoggedIn: true
+  };
+
+  fetchMock.post(`${process.env.APP_BASE_URL}/auth/login`, recievedData);
+
+  const store = mockStore({});
+
+  const expectedActions = [{
+    payload: {
+      isLoading: true,
+      message: 'System is logging you in'
+    },
+    type: 'LOADING_TRUE'
+  },
+  {
+    payload: {
+      isLoading: false,
+      message: ''
+    },
+    type: 'LOADING_FALSE'
+  },
+  {
+    payload: {
+      isLoggedIn: true,
+    },
+    type: 'AUTH_USER_SUCCESS'
+  },
+  {
+    payload: {
+      message: '',
+      status: true
+    },
+    type: 'NOTIFY_USER_TRUE'
+  }
+  ];
+  return store.dispatch(loginUser('augustineezinwa@gmail.com', 'ytyrtrg45r', { push: jest.fn() }))
+    .then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+});
+
 test('fetch user async action should trigger the following set of actions', () => {
   const recievedData = {
-    status: 'false',
+    status: 'fail',
     isLoggedIn: true
   };
 
@@ -72,9 +119,57 @@ test('fetch user async action should trigger the following set of actions', () =
     },
     type: 'LOADING_TRUE'
   },
-  
+  {
+    payload: {
+      isLoading: false,
+      message: '',
+    },
+    type: 'LOADING_FALSE'
+  },
+  {
+    payload: {
+      message: '',
+      status: true
+    },
+    type: 'NOTIFY_USER_TRUE'
+  },
   ];
-  return store.dispatch(authUser('augustine', 'ezinwa', 'augustineezinwa@gmail.com', 'dfdf', 'dfdf', { push: jest.fn() }))
+});
+
+
+test('login user async action should trigger the following set of actions', () => {
+  const recievedData = {
+    status: 'fail',
+    isLoggedIn: true
+  };
+
+  fetchMock.post(`${process.env.APP_BASE_URL}/auth/login`, recievedData);
+
+  const store = mockStore({});
+
+  const expectedActions = [{
+    payload: {
+      isLoading: true,
+      message: 'System is logging you in'
+    },
+    type: 'LOADING_TRUE'
+  },
+  {
+    payload: {
+      isLoading: false,
+      message: '',
+    },
+    type: 'LOADING_FALSE'
+  },
+  {
+    payload: {
+      message: '',
+      status: true
+    },
+    type: 'NOTIFY_USER_TRUE'
+  },
+  ];
+  return store.dispatch(loginUser('augustineezinwa@gmail.com', 'dfdf', { push: jest.fn() }))
     .then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
