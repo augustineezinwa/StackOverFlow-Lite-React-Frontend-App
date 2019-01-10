@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { fetchAQuestion } from '../../actions/fetchAQuestionAction';
 import { fetchUsers } from '../../actions/fetchUsersActions';
+import { postAnswer } from '../../actions/postAnswerAction';
 import AnswerList from './AnswerList';
 import findData from '../../utils/findData';
 
@@ -10,17 +11,45 @@ export class QuestionPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      answer: ''
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleOnSubmit = this.handleOnSubmit.bind(this);
   }
 
   componentDidMount() {
-    const { match, fetchQuestion, fetchAllUserData, history } = this.props;
+    const {
+      match, fetchQuestion, fetchAllUserData, history
+    } = this.props;
     fetchQuestion(match.params.questionId, history);
     fetchAllUserData();
   }
 
+  componentDidUpdate(prevProps) {
+    const {
+      answers, match, fetchQuestion, fetchAllUserData, history
+    } = this.props;
+    if ((prevProps.answers !== answers) && answers) {
+      fetchQuestion(match.params.questionId, history);
+      fetchAllUserData();
+    }
+  }
+
+  handleChange(e) {
+    e.preventDefault();
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
+  handleOnSubmit(e) {
+    e.preventDefault();
+    const { match, postAnAnswer } = this.props;
+    const { answer } = this.state;
+    postAnAnswer(match.params.questionId, answer);
+  }
 
   render() {
+    const { answer } = this.state;
     const { question, users } = this.props;
     if (question.answers && users.length) {
       const calcVotes = (votes) => {
@@ -97,10 +126,13 @@ export class QuestionPage extends Component {
                   <div>&nbsp;</div>
                   <div>&nbsp;</div>
 
-                  <form className="">
+                  <form className="" method="POST" onSubmit={this.handleOnSubmit}>
 
                     <label htmlFor="password"><b>Add an answer</b></label>
-                    <textarea className="mt-2 txtarea" required style={{ fontSize: '1em', padding: '1em' }} />
+                    <textarea
+className="mt-2 txtarea" name="answer"
+                     required style={{ fontSize: '1em', padding: '1em' }}
+                      onChange={this.handleChange} value={answer} />
 
                     <button type="submit"> Add</button>
                   </form>
@@ -118,12 +150,14 @@ export class QuestionPage extends Component {
 
 const mapStateToProps = state => ({
   question: state.question.data,
-  users: state.users.data
+  users: state.users.data,
+  answers: state.answers.data
 });
 
 const mapActionsToProps = {
   fetchQuestion: fetchAQuestion,
   fetchAllUserData: fetchUsers,
+  postAnAnswer: postAnswer
 };
 
 

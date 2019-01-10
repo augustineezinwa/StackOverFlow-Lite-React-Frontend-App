@@ -5,6 +5,7 @@ import loaderReducer from './loaderReducer';
 import usersReducer from './usersReducer';
 import authReducer from './authReducer';
 import notificationsReducer from './notifcationsReducer';
+import answersReducer from './postAnswersReducer';
 
 const indexReducer = combineReducers({
   questions: questionsReducer,
@@ -12,7 +13,8 @@ const indexReducer = combineReducers({
   loaders: loaderReducer,
   notifications: notificationsReducer,
   users: usersReducer,
-  auth: authReducer
+  auth: authReducer,
+  answers: answersReducer
 });
 
 export default indexReducer;

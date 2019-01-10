@@ -81,12 +81,7 @@ export class HomePage extends Component {
                 <div
                   id="main-fish"
                   className="maincont"
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(3, 1fr)',
-                    gridGap: '10px',
-                    gridAutoRows: 'minMax(100px, auto)'
-                  }}>
+                   >
                   {questions.map(x => (
                     <div className="row" key={x.id}>
                       <QuestionCard

@@ -17,6 +17,9 @@ class App extends Component {
     this.state = {};
   }
 
+  componentDidMount() {
+  }
+
   render() {
     return (
       <Provider store={store}>

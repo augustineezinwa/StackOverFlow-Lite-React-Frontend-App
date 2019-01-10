@@ -22,5 +22,9 @@ export default {
   auth: {
     isLoggedIn: false,
     errors: {}
+  },
+  answers: {
+    data: [],
+    errors: {}
   }
 };
