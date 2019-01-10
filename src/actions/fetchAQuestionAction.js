@@ -21,6 +21,7 @@ export const fetchAQuestion = (id, history) => (dispatch) => {
       }
       if (data.status === 'fail') {
         dispatch(sendNotification(true, 'we cant find the question you are looking for'));
+        dispatch(fetchAQuestonFailure(data.message));
         return history.push('/');
       }
     });

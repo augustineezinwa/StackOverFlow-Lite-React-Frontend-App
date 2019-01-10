@@ -46,7 +46,10 @@ class AskPage extends Component {
               <input type="text" id="questionTitle" name="questionTitle" value={questionTitle} onChange={this.handleChange} />
 
               <label htmlFor="password"><b>Describe your Question</b></label>
-              <textarea className="mt-2 txtarea pd-2" id="questionDescription" style={{ fontSize: '1em' }} name="questionDescription" value={questionDescription} onChange={this.handleChange} />
+              <textarea className="mt-2 txtarea pd-2"
+               id="questionDescription"
+               style={{ fontSize: '1em' }} name="questionDescription"
+                value={questionDescription} onChange={this.handleChange} />
 
               <button type="submit" id="askButton">
                 {' '}
@@ -62,6 +65,7 @@ class AskPage extends Component {
     );
   }
 }
+
 
 const mapActionToProps = {
   postQuestion: postAQuestion

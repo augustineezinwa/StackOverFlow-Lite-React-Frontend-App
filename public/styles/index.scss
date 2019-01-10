@@ -120,7 +120,10 @@ button[type=answer]:hover {
   width: 100%;
 }
 
-
+#main-fish{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
 
 .question-background {
   margin: 0 auto; min-height: 800px; background-color: darkgray;
@@ -562,5 +565,10 @@ color: darkgray;
 
 #zoomedPhoto {
   padding-top: 10%;
+}
+
+#main-fish{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
 }
 }

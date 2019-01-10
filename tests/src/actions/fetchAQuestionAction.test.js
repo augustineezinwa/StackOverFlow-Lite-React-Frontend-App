@@ -99,6 +99,12 @@ test('fetch question async action should trigger the following set of actions', 
       message: 'we cant find the question you are looking for',
       status: true
     }
+  },
+  {
+    payload: {
+      errors: undefined
+    },
+    type: 'FETCH_QUESTION_FAILURE'
   }
   ];
   const history = {
