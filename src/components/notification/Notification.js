@@ -12,7 +12,7 @@ export class Notification extends Component {
   componentDidUpdate(prevProps) {
     const { status, turnOffNotification } = this.props;
     if (prevProps.status !== status && status) {
-      setTimeout(() => turnOffNotification(false, ''), 3000);
+      setTimeout(() => turnOffNotification(false), 3000);
     }
   }
 

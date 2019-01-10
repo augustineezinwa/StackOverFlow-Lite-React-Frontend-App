@@ -6,8 +6,9 @@ import indexReducer from '../reducers/indexReducer';
 
 const composeEnhancers = composeWithDevTools({});
 
-const configureStore = () => createStore(
-  indexReducer,
+
+const configureStore = (settings = {}) => createStore(
+  indexReducer, settings,
   composeEnhancers(applyMiddleware(thunk, logger))
 );
 
