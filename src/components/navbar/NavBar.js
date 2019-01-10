@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-
+import { authUserLogout } from '../../actions/authUserActions';
 export class NavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
     }
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
+  handleLogout() {
+    const { logOutUser } = this.props;
+    logOutUser();
+  }
 
   render() {
     const { isLoggedIn } = this.props;
@@ -51,4 +56,8 @@ const mapStateToProps = state => ({
   isLoggedIn: state.auth.isLoggedIn
 });
 
-export default connect(mapStateToProps)(NavBar);
+const mapActionToProps = {
+  logOutUser: authUserLogout
+}
+
+export default connect(mapStateToProps, mapActionToProps)(NavBar);
