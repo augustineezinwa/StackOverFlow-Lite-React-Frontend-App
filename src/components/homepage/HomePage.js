@@ -77,7 +77,7 @@ export class HomePage extends Component {
               )
             }
             {
-              questions.length && (
+              !!questions.length && (
                 <div
                   id="main-fish"
                   className="maincont"
