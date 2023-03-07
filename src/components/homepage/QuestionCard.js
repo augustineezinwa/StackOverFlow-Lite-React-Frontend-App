@@ -7,7 +7,7 @@ const QuestionCard = ({
   totalUpVotes, totalDownVotes
 }) => {
   let newQuestionTitle;
-  if (questionTitle.length > 55) {
+  if (questionTitle.length > 2000) {
     newQuestionTitle = `${questionTitle.substr(0, 88)} ...`;
   }
   let answerNumberDisplay = `${answerNumber} Answer`;
@@ -23,8 +23,8 @@ const QuestionCard = ({
               </div>
 
             </div>
-            <div className="col-5">
-              <div className="question">{newQuestionTitle || questionTitle}</div>
+            <div className="col-full">
+              <div className="question lh-1">{newQuestionTitle || questionTitle}</div>
 
             </div>
           </div>
