@@ -69,6 +69,14 @@ body {
   
 }
 
+.lh-1 {
+  line-height: 1.5rem;
+}
+
+.symbol-display {
+  
+}
+
 button[type=answer] {
   background-color: white; 
   color: hotpink; 
@@ -129,7 +137,8 @@ button[type=answer]:hover {
   margin: 0 auto; min-height: 800px; background-color: darkgray;
 }
 .question {
-  font-weight: bold
+  font-weight: bold;
+  margin-left : -5%;
 }
 .header {
   color: white;
@@ -289,6 +298,16 @@ button[type=answer]:hover {
 .col-2 {
   flex: 30%
 }
+
+.col-full {
+  flex: 100%;
+}
+
+.col-1 {
+  flex: 20%;
+}
+
+
 .col-3 {
   flex: 40%
 }
@@ -411,7 +430,7 @@ button[type=deleteButton] {
 
 
 @media screen and (max-width: 768px) {
-  .col,.col-2, .col-5, .col-6, .col-3 {
+  .col,.col-2, .col-5, .col-6, .col-3, .col-1 {
     flex-basis: 100%;
   }
   .row {
