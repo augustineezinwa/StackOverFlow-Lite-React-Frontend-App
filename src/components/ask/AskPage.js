@@ -1,4 +1,5 @@
 import React, { Fragment, Component } from 'react';
+import Yamde from 'yamde';
 import { connect } from 'react-redux';
 import { postAQuestion } from '../../actions/postAQuestionAction';
 
@@ -46,7 +47,8 @@ class AskPage extends Component {
               <input type="text" id="questionTitle" name="questionTitle" value={questionTitle} onChange={this.handleChange} />
 
               <label htmlFor="password"><b>Describe your Question</b></label>
-              <textarea className="mt-2 txtarea pd-2"
+              <textarea
+               className="mt-2 txtarea pd-2"
                id="questionDescription"
                style={{ fontSize: '1em' }} name="questionDescription"
                 value={questionDescription} onChange={this.handleChange} />
@@ -55,6 +57,7 @@ class AskPage extends Component {
                 {' '}
                 <span id="askNotification">Ask</span>
               </button>
+              {/* <Yamde value={questionDescription} handler={this.handleChange} theme="light" /> */}
             </form>
           </div>
         </div>

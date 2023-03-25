@@ -79,14 +79,14 @@ export class QuestionPage extends Component {
                       </div>
                     </div>
                     <div className="col-2">
-                      <div className="row">
-                        <div className="col">
+                      <div className="row wrap">
+                        <div className="col mb-1">
                           {calcVotes('upvotes')}
                           {' '}
                           upvotes
 
                         </div>
-                        <div className="col">
+                        <div className="col mb-1">
                           {calcVotes('downvotes')}
                           {' '}
                           downvotes
@@ -129,8 +129,8 @@ export class QuestionPage extends Component {
                   <form className="" method="POST" onSubmit={this.handleOnSubmit}>
 
                     <label htmlFor="password"><b>Add an answer</b></label>
-                    <textarea
-className="mt-2 txtarea" name="answer"
+                    <textarea 
+                    className="mt-2 txtarea" name="answer"
                      required style={{ fontSize: '1em', padding: '1em' }}
                       onChange={this.handleChange} value={answer} />
 
