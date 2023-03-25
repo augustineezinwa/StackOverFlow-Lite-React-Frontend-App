@@ -341,6 +341,11 @@ input[type=text], input[type=password] {
 .ft {
   font-size: 14.48px;
 }
+
+.wrap {
+  flex-wrap: wrap;
+}
+
 .txtarea {
   height: 200px;
   width : 100%;
