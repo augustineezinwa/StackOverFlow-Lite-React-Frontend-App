@@ -139,6 +139,7 @@ button[type=answer]:hover {
 .question {
   font-weight: bold;
   margin-left : -5%;
+  margin-top: 5%;
 }
 .header {
   color: white;
@@ -428,15 +429,20 @@ button[type=deleteButton] {
   display: none
 }
 
+.alertPopup {
+  margin: auto;
+  width: 22rem;
+}
+
 
 @media screen and (max-width: 768px) {
-  .col,.col-2, .col-5, .col-6, .col-3, .col-1 {
-    flex-basis: 100%;
+  .alertPopup {
+    width:20rem;
   }
+
   .row {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
   }
 .card {
   padding-left: 1%;
@@ -451,7 +457,6 @@ button[type=deleteButton] {
       padding-top: 10%;
        padding-bottom: 10%; 
        border-radius: 50%; 
-       width: 30%;
 }
 .col, .col-2, .col-3, .col-5 {
   margin-top: 2%;
