@@ -346,6 +346,10 @@ input[type=text], input[type=password] {
   flex-wrap: wrap;
 }
 
+.text {
+  white-space: break-spaces;
+}
+
 .txtarea {
   height: 200px;
   width : 100%;
@@ -567,7 +571,7 @@ color: darkgray;
 
 
 .question-card {
-  width: 90%;
+  width: 100%;
   padding: 30px;
   border:  1px solid #eff1f3;
   background-color: white;

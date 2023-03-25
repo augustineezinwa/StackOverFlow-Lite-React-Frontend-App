@@ -5,7 +5,7 @@ const AnswerList = ({
 }) => (
     <Fragment>
       <div className="row" key={id}>
-        <div className="col-5 pd-1">
+        <div className="col-5 pd-1 text">
           {answer}
           <div className="row wrap mt-4">
             <div className="col">
