@@ -51,14 +51,14 @@ const AnswerList = ({
           </div>
         </div>
         <div className="col-2">
-          <div className="row">
-            <div className="col">
+          <div className="row wrap">
+            <div className="col mb-1">
               {' '}
               {upvotes}
               {' '}
               upvotes
             </div>
-            <div className="col">
+            <div className="col mb-1">
               {downvotes}
               {' '}
               downvotes
@@ -66,21 +66,21 @@ const AnswerList = ({
           </div>
 
           <div className="row">
-            <div className="col">
+            <div className="col wrap mb-1">
               <span>
                 {' '}
                 <i className="fas fa-thumbs-up blue resize" />
               </span>
 
             </div>
-            <div className="col">
+            <div className="col wrap mb-1">
               <span>
                 {' '}
                 <i className="fas fa-star blue resize" />
               </span>
 
             </div>
-            <div className="col">
+            <div className="col wrap mb-1">
               <span>
                 {' '}
                 <i className="fas fa-thumbs-down blue resize" />

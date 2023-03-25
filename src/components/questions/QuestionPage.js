@@ -79,14 +79,14 @@ export class QuestionPage extends Component {
                       </div>
                     </div>
                     <div className="col-2">
-                      <div className="row">
-                        <div className="col">
+                      <div className="row wrap">
+                        <div className="col mb-1">
                           {calcVotes('upvotes')}
                           {' '}
                           upvotes
 
                         </div>
-                        <div className="col">
+                        <div className="col mb-1">
                           {calcVotes('downvotes')}
                           {' '}
                           downvotes
