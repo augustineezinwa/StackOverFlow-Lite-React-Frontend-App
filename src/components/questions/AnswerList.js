@@ -5,9 +5,9 @@ const AnswerList = ({
 }) => (
     <Fragment>
       <div className="row" key={id}>
-        <div className="col-5">
+        <div className="col-5 pd-1">
           {answer}
-          <div className="row mt-4">
+          <div className="row wrap mt-4">
             <div className="col">
               <div className="ft">
                 Answered by
@@ -65,22 +65,22 @@ const AnswerList = ({
             </div>
           </div>
 
-          <div className="row">
-            <div className="col wrap mb-1">
+          <div className="row wrap">
+            <div className="col mb-1">
               <span>
                 {' '}
                 <i className="fas fa-thumbs-up blue resize" />
               </span>
 
             </div>
-            <div className="col wrap mb-1">
+            <div className="col mb-1">
               <span>
                 {' '}
                 <i className="fas fa-star blue resize" />
               </span>
 
             </div>
-            <div className="col wrap mb-1">
+            <div className="col mb-1">
               <span>
                 {' '}
                 <i className="fas fa-thumbs-down blue resize" />
