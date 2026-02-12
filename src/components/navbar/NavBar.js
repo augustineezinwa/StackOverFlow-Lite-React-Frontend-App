@@ -16,7 +16,7 @@ export class NavBar extends Component {
   }
 
   render() {
-    const { isLoggedIn } = this.props;
+    const { isLoggedIn, isDarkMode, onThemeToggle } = this.props;
     return (
       <div className="nav" id="navbar">
         <div className="nav-header">
@@ -36,6 +36,20 @@ export class NavBar extends Component {
           <NavLink to="/" id="homeLink">Home</NavLink>
           <NavLink to="/ask" id="askLink">AskQuestion</NavLink>
           <NavLink to="/profile" id="profileLink" style={{ display: `${!isLoggedIn ? 'none' : ''} ` }}>My Profile</NavLink>
+          <div className="theme-toggle-wrapper">
+            <label className="theme-toggle-label" htmlFor="theme-toggle">
+              Dark mode
+            </label>
+            <label className="theme-switch" htmlFor="theme-toggle">
+              <input
+                id="theme-toggle"
+                type="checkbox"
+                checked={isDarkMode}
+                onChange={onThemeToggle}
+              />
+              <span className="theme-slider" />
+            </label>
+          </div>
 
           <div className="search-bar">
             <input id="searchBox" type="search" />
@@ -59,5 +73,10 @@ const mapStateToProps = state => ({
 const mapActionToProps = {
   logOutUser: authUserLogout
 }
+
+NavBar.defaultProps = {
+  isDarkMode: false,
+  onThemeToggle: () => {}
+};
 
 export default connect(mapStateToProps, mapActionToProps)(NavBar);

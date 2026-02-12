@@ -19,7 +19,8 @@ export const fetchUsers = () => (dispatch) => {
         dispatch(fetchUserSuccess(data.data.users));
       }
       if (data.status === 'fail') {
-        dispatch(appLoader(true, 'we cant find this data'));
+        dispatch(appLoader(false, ''));
+        dispatch(fetchUserFailure(data.error || { message: 'we cant find this data' }));
       }
     });
 };
