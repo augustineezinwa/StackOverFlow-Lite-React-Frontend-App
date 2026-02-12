@@ -13,8 +13,8 @@ const QuestionCard = ({
   let answerNumberDisplay = `${answerNumber} Answer`;
   if (answerNumber > 1) answerNumberDisplay = `${answerNumber} Answers`;
   return (
-    <div className="col">
-      <div className="card">
+    <div className="question-grid-col">
+      <div className="card question-list-card">
         <div className="container">
           <div className="row mt-4 pd-1">
             <div className="col-2">

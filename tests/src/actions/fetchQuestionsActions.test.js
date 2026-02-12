@@ -64,7 +64,8 @@ test('fetch question async action should trigger the following set of actions', 
   },
   {
     payload: {
-      data: recievedData.data.questions
+      data: recievedData.data.questions,
+      append: false
     },
     type: 'FETCH_QUESTIONS_SUCCESS'
   }
@@ -92,7 +93,7 @@ test('fetch question success actions should trigger the expected action', () => 
   ];
   expect(fetchQuestionSuccess(data)).toEqual({
     type: 'FETCH_QUESTIONS_SUCCESS',
-    payload: { data }
+    payload: { data, append: false }
   });
 });
 

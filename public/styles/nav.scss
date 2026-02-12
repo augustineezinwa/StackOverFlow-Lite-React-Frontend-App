@@ -11,6 +11,65 @@ body {
     background-color: black;
 }
 
+.theme-toggle-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #efefef;
+  float: right;
+  margin-top: 12px;
+  margin-right: 10px;
+}
+
+.theme-toggle-label {
+  font-size: 14px;
+}
+
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.theme-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #8a8a8a;
+  transition: 0.2s;
+  border-radius: 999px;
+}
+
+.theme-slider::before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.2s;
+  border-radius: 50%;
+}
+
+.theme-switch input:checked + .theme-slider {
+  background-color: hotpink;
+}
+
+.theme-switch input:checked + .theme-slider::before {
+  transform: translateX(20px);
+}
+
 .nav {
   height: 53px;
   width: 100%;
@@ -143,6 +202,13 @@ button {
       float: none;
       width: 90%;
   }
+  .theme-toggle-wrapper {
+      float: none;
+      display: flex;
+      justify-content: flex-start;
+      margin: 10px 12px;
+      color: #efefef;
+  }
   button {
       margin-left: 5px;
       margin-top: 5px;
@@ -152,4 +218,42 @@ button {
       margin-left: 5px;
       margin-right: 5px;
   }
+}
+
+body.dark-mode .nav {
+  background-color: #11151b;
+  border-bottom: 1px solid #2e3440;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-mode .nav > .nav-links > a {
+  color: #ffffff;
+}
+
+body.dark-mode .nav > .nav-links > a:hover {
+  background-color: rgba(120, 154, 207, 0.18);
+  color: #ffffff;
+}
+
+body.dark-mode .nav > .nav-links {
+  background-color: #151a22;
+}
+
+body.dark-mode .nav > .nav-header > .nav-title {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(131, 163, 214, 0.3);
+}
+
+body.dark-mode input[type=search] {
+  background-color: rgba(9, 14, 22, 0.82);
+  color: #f8fbff;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+body.dark-mode .theme-toggle-label {
+  color: #ffffff;
+}
+
+body.dark-mode .theme-slider {
+  background-color: #475166;
 }

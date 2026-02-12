@@ -8,7 +8,10 @@ export class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      visibleCount: 8
     };
+    this.pageSize = 8;
+    this.loadMoreQuestions = this.loadMoreQuestions.bind(this);
   }
 
   componentDidMount() {
@@ -16,8 +19,17 @@ export class HomePage extends Component {
     fetchAllQuestions();
   }
 
+  loadMoreQuestions() {
+    this.setState(prevState => ({
+      visibleCount: prevState.visibleCount + this.pageSize
+    }));
+  }
+
   render() {
     const { questions } = this.props;
+    const { visibleCount } = this.state;
+    const visibleQuestions = questions.slice(0, visibleCount);
+    const hasMoreQuestions = visibleCount < questions.length;
 
     return (
       <Fragment>
@@ -78,22 +90,36 @@ export class HomePage extends Component {
             }
             {
               !!questions.length && (
-                <div
-                  id="main-fish"
-                  className="maincont"
-                   >
-                  {questions.map(x => (
-                    <div className="row" key={x.id}>
-                      <QuestionCard
-                        key={x.id}
-                        questionTitle={x.questionTitle}
-                        questionId={x.id}
-                        answerNumber={x.numberOfAnswers}
-                        totalUpVotes={x.upvotes}
-                        totalDownVotes={x.downvotes} />
+                <Fragment>
+                  <div
+                    id="main-fish"
+                    className="maincont"
+                     >
+                    {visibleQuestions.map(x => (
+                      <div className="question-grid-item" key={x.id}>
+                        <QuestionCard
+                          key={x.id}
+                          questionTitle={x.questionTitle}
+                          questionId={x.id}
+                          answerNumber={x.numberOfAnswers}
+                          totalUpVotes={x.upvotes}
+                          totalDownVotes={x.downvotes} />
+                      </div>
+                    ))}
+                  </div>
+                  {hasMoreQuestions && (
+                    <div className="container" style={{ textAlign: 'center', padding: '1rem 0' }}>
+                      <button type="button" onClick={this.loadMoreQuestions}>
+                        Load more
+                      </button>
                     </div>
-                  ))}
-                </div>
+                  )}
+                  {!hasMoreQuestions && !!questions.length && (
+                    <div className="container" style={{ textAlign: 'center', padding: '1rem' }}>
+                      No more questions.
+                    </div>
+                  )}
+                </Fragment>
               )
             }
 
@@ -117,7 +143,7 @@ const mapActionsToProps = {
 
 HomePage.propTypes = {
   fetchAllQuestions: PropTypes.func.isRequired,
-  questions: PropTypes.object.isRequired,
+  questions: PropTypes.array.isRequired,
 };
 
 
