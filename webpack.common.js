@@ -33,7 +33,7 @@ module.exports = {
         ]
       },
       {
-        test: /\.jpg$/,
+        test: /\.(jpg|jpeg|webp)$/i,
         loader: 'file-loader'
       },
       {
@@ -76,6 +76,8 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.APP_BASE_URL': JSON.stringify(process.env.APP_BASE_URL),
+      'process.env.CLOUDINARY_CLOUD_NAME': JSON.stringify(process.env.CLOUDINARY_CLOUD_NAME),
+      'process.env.CLOUDINARY_UPLOAD_PRESET': JSON.stringify(process.env.CLOUDINARY_UPLOAD_PRESET),
     }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
@@ -93,7 +95,7 @@ module.exports = {
     })
   ],
   resolve: {
-    extensions: ['.js', '.jsx', '.css', '.scss', '.png']
+    extensions: ['.js', '.jsx', '.css', '.scss', '.png', '.webp']
   },
   optimization: {
     minimizer: [

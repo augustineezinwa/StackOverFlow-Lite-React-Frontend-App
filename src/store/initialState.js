@@ -5,7 +5,10 @@ export default {
   },
   questions: {
     data: [],
-    errors: {}
+    errors: {},
+    nextCursor: null,
+    hasMore: true,
+    loadingMore: false
   },
   notifications: {
     status: false,
@@ -26,5 +29,16 @@ export default {
   answers: {
     data: [],
     errors: {}
+  },
+  profile: {
+    data: {},
+    errors: {}
+  },
+  userQuestions: {
+    data: [],
+    errors: {},
+    nextCursor: null,
+    hasMore: true,
+    loadingMore: false
   }
 };

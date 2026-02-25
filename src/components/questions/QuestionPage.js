@@ -5,6 +5,7 @@ import { fetchAQuestion } from '../../actions/fetchAQuestionAction';
 import { fetchUsers } from '../../actions/fetchUsersActions';
 import { postAnswer } from '../../actions/postAnswerAction';
 import AnswerList from './AnswerList';
+import RichTextEditor from '../common/RichTextEditor';
 import findData from '../../utils/findData';
 
 export class QuestionPage extends Component {
@@ -14,7 +15,7 @@ export class QuestionPage extends Component {
       answer: ''
     };
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleAnswerChange = this.handleAnswerChange.bind(this);
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
   }
 
@@ -36,15 +37,16 @@ export class QuestionPage extends Component {
     }
   }
 
-  handleChange(e) {
-    e.preventDefault();
-    this.setState({ [e.target.name]: e.target.value });
+  handleAnswerChange(html) {
+    this.setState({ answer: html });
   }
 
   handleOnSubmit(e) {
     e.preventDefault();
     const { match, postAnAnswer } = this.props;
     const { answer } = this.state;
+    const textOnly = (answer || '').replace(/<[^>]*>/g, '').trim();
+    if (!textOnly) return;
     postAnAnswer(match.params.questionId, answer);
   }
 
@@ -67,7 +69,16 @@ export class QuestionPage extends Component {
                   <div className="underline">&nbsp;</div>
                   <div className="row">
                     <div className="col-5">
-                      {question.questionDescription}
+                      {(question.questionDescription || '').trim().startsWith('<')
+                        ? (
+                          <div
+                            className="rich-text-content"
+                            dangerouslySetInnerHTML={{ __html: question.questionDescription }}
+                          />
+                        )
+                        : (
+                          <span className="rich-text-content">{question.questionDescription}</span>
+                        )}
                       <div className="mt-4 ft">
                         Asked by
                         {' '}
@@ -95,8 +106,18 @@ export class QuestionPage extends Component {
                     </div>
                   </div>
 
+                  {(question.imageUrl || question.image_url) && (
+                    <div className="question-detail-image-wrap">
+                      <img
+                        src={question.imageUrl || question.image_url}
+                        alt=""
+                        className="question-detail-image"
+                      />
+                    </div>
+                  )}
+
                   <div>&nbsp;</div>
-                  <div className="underline;">&nbsp;</div>
+                  <div className="underline">&nbsp;</div>
 
                   <div className="">
                     {' '}
@@ -128,11 +149,13 @@ export class QuestionPage extends Component {
 
                   <form className="" method="POST" onSubmit={this.handleOnSubmit}>
 
-                    <label htmlFor="password"><b>Add an answer</b></label>
-                    <textarea 
-                    className="mt-2 txtarea" name="answer"
-                     required style={{ fontSize: '1em', padding: '1em' }}
-                      onChange={this.handleChange} value={answer} />
+                    <label htmlFor="answer"><b>Add an answer</b></label>
+                    <RichTextEditor
+                      value={answer}
+                      placeholder="Write your answer… You can use bold, lists, and insert images."
+                      onChange={this.handleAnswerChange}
+                      minHeight={140}
+                    />
 
                     <button type="submit"> Add</button>
                   </form>

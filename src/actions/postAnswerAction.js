@@ -2,6 +2,7 @@ import { POST_ANSWER_FAILURE, POST_ANSWER_SUCCESS } from './actionTypes';
 import appLoader from './loaderActions';
 import sendNotification from './notificationsActions';
 import obtainToken from '../utils/obtainToken';
+import { authFetch } from '../utils/apiClient';
 
 export const postAnswerSuccess = data => ({
   type: POST_ANSWER_SUCCESS, payload: { data }
@@ -13,7 +14,7 @@ export const postAnswerFailure = errors => ({
 
 export const postAnswer = (questionId, answer) => (dispatch) => {
   dispatch(appLoader(true, 'We are sending in your answer'));
-  return fetch(`${process.env.APP_BASE_URL}/questions/${questionId}/answers`, {
+  return authFetch(`${process.env.APP_BASE_URL}/questions/${questionId}/answers`, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json',

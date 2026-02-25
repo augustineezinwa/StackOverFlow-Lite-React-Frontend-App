@@ -8,6 +8,9 @@ import NotificationComponent from './components/notification/Notification';
 import ModalNotificationComponent from './components/notification/ModalNotification';
 import store from './store/store';
 import routeTable from './routeTable';
+import obtainToken from './utils/obtainToken';
+import { authUserLogout } from './actions/authUserActions';
+import sendNotification from './actions/notificationsActions';
 import '../public/styles/nav.scss';
 import '../public/styles/index.scss';
 
@@ -31,6 +34,12 @@ class App extends Component {
   componentDidMount() {
     const { isDarkMode } = this.state;
     document.body.classList.toggle('dark-mode', isDarkMode);
+    // If Redux says logged in but there is no token, treat as expired and log out
+    const state = store.getState();
+    if (state.auth && state.auth.isLoggedIn && !obtainToken()) {
+      store.dispatch(sendNotification(true, 'Session expired. Please log in again.'));
+      store.dispatch(authUserLogout());
+    }
     if (typeof window !== 'undefined' && window.matchMedia) {
       this.colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
       if (this.colorSchemeQuery.addEventListener) {

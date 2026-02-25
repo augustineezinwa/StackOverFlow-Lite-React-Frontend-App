@@ -1,4 +1,4 @@
-import { FETCH_QUESTIONS_FAILURE, FETCH_QUESTIONS_SUCCESS } from '../actions/actionTypes';
+import { FETCH_QUESTIONS_FAILURE, FETCH_QUESTIONS_SUCCESS, QUESTIONS_LOADING_MORE } from '../actions/actionTypes';
 import initialState from '../store/initialState';
 
 const { questions } = initialState;
@@ -6,8 +6,10 @@ const { questions } = initialState;
 const questionsReducer = (state = questions, action) => {
   const { type, payload } = action;
   switch (type) {
+    case QUESTIONS_LOADING_MORE:
+      return { ...state, loadingMore: payload === true };
     case FETCH_QUESTIONS_FAILURE:
-      return { ...state, ...payload };
+      return { ...state, ...payload, loadingMore: false };
     case FETCH_QUESTIONS_SUCCESS:
       if (payload && payload.append) {
         const existingQuestions = Array.isArray(state.data) ? state.data : [];
@@ -18,9 +20,21 @@ const questionsReducer = (state = questions, action) => {
             mergedQuestions.push(question);
           }
         });
-        return { ...state, data: mergedQuestions };
+        return {
+          ...state,
+          data: mergedQuestions,
+          nextCursor: payload.nextCursor != null ? payload.nextCursor : state.nextCursor,
+          hasMore: payload.hasMore != null ? payload.hasMore : state.hasMore,
+          loadingMore: false
+        };
       }
-      return { ...state, ...payload };
+      return {
+        ...state,
+        data: payload.data || state.data,
+        nextCursor: payload.nextCursor != null ? payload.nextCursor : null,
+        hasMore: payload.hasMore != null ? payload.hasMore : true,
+        loadingMore: false
+      };
     default:
       return state;
   }
