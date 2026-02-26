@@ -1,5 +1,6 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 export class ModalNotification extends Component {
   constructor(props) {
@@ -9,45 +10,38 @@ export class ModalNotification extends Component {
 
   render() {
     const { message, isLoading } = this.props;
-    const shouldDisplay = isLoading ? "block" : "none";
+    const show = isLoading;
 
     return (
-      <div id="modalDisplay" style={{ display: shouldDisplay || "none" }}>
-        <div className="container modal">
-          <div className="row">
-            {/* <div className="col" /> */}
-            <div className="alertPopup">
-              <div className="col">
-                <div className="card">
-                  <div className="container">
-                    <div className="row mt-4 pd-1">
-                      <div className="col-2">
-                        <div className="symbol-display">
-                          <div className="alignSymbol">
-                            <span>
-                              <i className="fas fa-spinner fa-pulse"></i>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-5">
-                        <div className="question">{message}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* <div className="col" /> */}
+      <div
+        id="modalDisplay"
+        className="app-loader-overlay"
+        style={{ display: show ? 'flex' : 'none' }}
+      >
+        <div className="app-loader-content">
+          <div className="app-loader-spinner" aria-hidden="true">
+            <i className="fas fa-spinner fa-pulse" />
           </div>
+          <p className="app-loader-message">{message}</p>
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   message: state.loaders.message,
   isLoading: state.loaders.isLoading,
 });
+
+ModalNotification.propTypes = {
+  message: PropTypes.string,
+  isLoading: PropTypes.bool,
+};
+
+ModalNotification.defaultProps = {
+  message: '',
+  isLoading: false,
+};
+
 export default connect(mapStateToProps)(ModalNotification);
