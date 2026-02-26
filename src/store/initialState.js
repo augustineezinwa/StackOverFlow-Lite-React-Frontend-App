@@ -40,5 +40,9 @@ export default {
     nextCursor: null,
     hasMore: true,
     loadingMore: false
+  },
+  pinnedQuestions: {
+    data: [],
+    error: null
   }
 };

@@ -2,12 +2,18 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import QuestionCard from './QuestionCard';
+import PinnedQuestionsCard from './PinnedQuestionsCard';
+import CategoriesCard from './CategoriesCard';
 import { fetchQuestions } from '../../actions/fetchQuestionsActions';
+import { pinOrUnpinQuestion, archiveQuestion } from '../../actions/pinnedQuestionsActions';
+import getCurrentUser from '../../utils/getCurrentUser';
 import warplaneImage from '../../../public/images/warplane.webp';
 import scienceLabImage from '../../../public/images/sciencelab.webp';
 import vintageCarImage from '../../../public/images/vintqge.webp';
 import fashionImage from '../../../public/images/fashion.webp';
 import soldiersImage from '../../../public/images/soliders.webp';
+
+const CATEGORY_STORAGE_KEY = 'stackoverflow_lite_selected_category';
 
 const heroSlides = [
   {
@@ -40,9 +46,12 @@ const heroSlides = [
 export class HomePage extends Component {
   constructor(props) {
     super(props);
+    const savedCategory = typeof localStorage !== 'undefined'
+      ? localStorage.getItem(CATEGORY_STORAGE_KEY) : null;
     this.state = {
       currentSlide: 0,
-      loadedSlideIndices: [0]
+      loadedSlideIndices: [0],
+      selectedCategory: savedCategory || null
     };
     this.slideInterval = null;
     this.isComponentMounted = false;
@@ -54,12 +63,17 @@ export class HomePage extends Component {
     this.preloadSlide = this.preloadSlide.bind(this);
     this.preloadUpcomingSlides = this.preloadUpcomingSlides.bind(this);
     this.loadMoreIfNeeded = this.loadMoreIfNeeded.bind(this);
+    this.handleSelectCategory = this.handleSelectCategory.bind(this);
+    this.handleResetCategory = this.handleResetCategory.bind(this);
+    this.handlePinQuestion = this.handlePinQuestion.bind(this);
+    this.handleArchiveQuestion = this.handleArchiveQuestion.bind(this);
   }
 
   componentDidMount() {
     const { fetchAllQuestions } = this.props;
+    const { selectedCategory } = this.state;
     this.isComponentMounted = true;
-    fetchAllQuestions({ limit: 10 });
+    fetchAllQuestions({ limit: 10, category: selectedCategory || undefined });
     this.preloadUpcomingSlides(0);
     this.slideInterval = setInterval(this.advanceSlide, 2000);
     this.observer = new IntersectionObserver(
@@ -72,7 +86,7 @@ export class HomePage extends Component {
     );
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     if (this.observer && this.sentinelRef.current) {
       this.observer.disconnect();
       this.observer.observe(this.sentinelRef.current);
@@ -85,14 +99,49 @@ export class HomePage extends Component {
     if (this.observer) this.observer.disconnect();
   }
 
+  handlePinQuestion(id) {
+    this.props.pinOrUnpinQuestion(id, true);
+  }
+
+  handleArchiveQuestion(id) {
+    this.props.archiveQuestion(id, true);
+  }
+
   loadMoreIfNeeded() {
     const { fetchAllQuestions, questions } = this.props;
+    const { selectedCategory } = this.state;
     const list = questions.data || [];
     const { nextCursor, hasMore, loadingMore } = questions;
     if (loadingMore || !hasMore) return;
     if (list.length === 0) return;
-    const cursor = nextCursor != null ? nextCursor : (list[list.length - 1] && list[list.length - 1].id);
-    fetchAllQuestions({ limit: 10, cursor, append: true });
+    const lastQuestion = list[list.length - 1];
+    const cursor = nextCursor != null ? nextCursor : (lastQuestion && lastQuestion.id);
+    fetchAllQuestions({
+      limit: 10,
+      cursor,
+      category: selectedCategory || undefined,
+      append: true
+    });
+  }
+
+  handleSelectCategory(cat) {
+    const slug = cat.slug || cat.name || cat.title || '';
+    if (!slug) return;
+    const { fetchAllQuestions } = this.props;
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(CATEGORY_STORAGE_KEY, slug);
+    }
+    this.setState({ selectedCategory: slug });
+    fetchAllQuestions({ limit: 10, category: slug });
+  }
+
+  handleResetCategory() {
+    const { fetchAllQuestions } = this.props;
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem(CATEGORY_STORAGE_KEY);
+    }
+    this.setState({ selectedCategory: null });
+    fetchAllQuestions({ limit: 10 });
   }
 
   goToSlide(slideIndex) {
@@ -139,11 +188,13 @@ export class HomePage extends Component {
   }
 
   render() {
-    const { questions } = this.props;
+    const { questions, auth } = this.props;
     const questionList = Array.isArray(questions.data) ? questions.data : [];
-    const { hasMore, loadingMore } = questions;
-    const { currentSlide, loadedSlideIndices } = this.state;
+    const { loadingMore } = questions;
+    const { currentSlide, loadedSlideIndices, selectedCategory } = this.state;
     const activeSlide = heroSlides[currentSlide];
+    const currentUser = getCurrentUser();
+    const isLoggedIn = !!(auth && auth.isLoggedIn);
 
     return (
       <Fragment>
@@ -186,80 +237,62 @@ export class HomePage extends Component {
           <div className="container dashboardfooter " id="dashBoardTitle"><h3>Trending Questions</h3></div>
 
           <div id="questionsDisplay">
-
-            {
-              !questionList.length && !questions.loadingMore && (
-                <div className="container">
-                  <div className="row no-questions">
-
-                    <div className="alignCardWidth">
-                      <div className="card">
-                        <div className="container">
-                          <div className="row mt-4 pd-1">
-                            <div className="col-2">
-                              <div className="symbol-display">
-                                <div className="alignSymbol">!</div>
-                              </div>
-
-                            </div>
-                            <div className="col-5">
-                              <div className="question">No Questions yet!  &nbsp; Refresh page  </div>
-
-                            </div>
-                          </div>
-
-                          <div className="col" style={{ textAlign: 'right' }}>
-                            <span />
-                            <span />
-                            <a href="/">
-                              <button type="answer">Refresh</button>
-                            </a>
-
-                          </div>
-
-                        </div>
-                      </div>
+            <div className="home-feed-layout">
+              <CategoriesCard
+                selectedCategory={selectedCategory}
+                onSelectCategory={this.handleSelectCategory}
+                onResetCategory={this.handleResetCategory}
+              />
+              <div className="home-feed-center">
+                {!questionList.length && !questions.loadingMore ? (
+                  <div className="no-questions-feed card">
+                    <div className="no-questions-feed-icon" aria-hidden="true">
+                      <i className="fas fa-inbox" />
                     </div>
-
+                    <p className="no-questions-feed-message">No questions yet!</p>
+                    <p className="no-questions-feed-hint">Refresh the page or try another category.</p>
+                    <a href="/" className="no-questions-feed-actions">
+                      <button type="button">Refresh</button>
+                    </a>
                   </div>
-                </div>
-              )
-            }
-            {
-              (!!questionList.length || questions.loadingMore) && (
-                <Fragment>
-                  <div
-                    id="main-fish"
-                    className="maincont"
-                  >
-                    {questionList.map(x => (
-                      <div className="question-grid-item" key={x.id}>
-                        <QuestionCard
-                          key={x.id}
-                          questionTitle={x.questionTitle}
-                          questionId={x.id}
-                          answerNumber={x.numberOfAnswers}
-                          totalUpVotes={x.upvotes}
-                          totalDownVotes={x.downvotes}
-                          imageUrl={x.imageUrl || x.image_url || ''}
-                          photoUrl={x.photoUrl || x.photo_url || ''}
-                          askerName={x.askedBy || x.askerName || x.fullName || ''}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  <div ref={this.sentinelRef} className="infinite-scroll-sentinel" aria-hidden="true" />
-                  {loadingMore && (
-                    <div className="container infinite-scroll-loading" style={{ textAlign: 'center', padding: '1rem 0' }}>
-                      <i className="fas fa-spinner fa-spin" style={{ fontSize: '1.5rem', color: 'hotpink' }} aria-hidden="true" />
-                      <span className="sr-only">Loading more questions</span>
+                ) : (
+                  <Fragment>
+                    <div id="main-fish" className="maincont">
+                      {questionList.map((x) => {
+                        const isOwner = currentUser
+                          && (String(x.userId) === String(currentUser.id)
+                            || String(x.user_id) === String(currentUser.id));
+                        return (
+                          <div className="question-grid-item" key={x.id}>
+                            <QuestionCard
+                              questionTitle={x.questionTitle}
+                              questionId={x.id}
+                              answerNumber={x.numberOfAnswers}
+                              totalUpVotes={x.upvotes}
+                              totalDownVotes={x.downvotes}
+                              imageUrl={x.imageUrl || x.image_url || ''}
+                              photoUrl={x.photoUrl || x.photo_url || ''}
+                              askerName={x.askedBy || x.askerName || x.fullName || ''}
+                              isOwner={!!isOwner}
+                              onPin={isLoggedIn ? this.handlePinQuestion : null}
+                              onArchive={isOwner ? this.handleArchiveQuestion : null}
+                            />
+                          </div>
+                        );
+                      })}
                     </div>
-                  )}
-                </Fragment>
-              )
-            }
-
-
+                    <div ref={this.sentinelRef} className="infinite-scroll-sentinel" aria-hidden="true" />
+                    {loadingMore && (
+                      <div className="container infinite-scroll-loading" style={{ textAlign: 'center', padding: '1rem 0' }}>
+                        <i className="fas fa-spinner fa-spin" style={{ fontSize: '1.5rem', color: 'hotpink' }} aria-hidden="true" />
+                        <span className="sr-only">Loading more questions</span>
+                      </div>
+                    )}
+                  </Fragment>
+                )}
+              </div>
+              <PinnedQuestionsCard />
+            </div>
           </div>
         </div>
       </Fragment>
@@ -268,17 +301,26 @@ export class HomePage extends Component {
 }
 
 
-export const mapStateToProps = state => ({
-  questions: state.questions
-});
-
-const mapActionsToProps = {
-  fetchAllQuestions: fetchQuestions
+export const mapStateToProps = (state) => {
+  const { questions, auth } = state;
+  return { questions, auth };
 };
 
+const mapActionsToProps = {
+  fetchAllQuestions: fetchQuestions,
+  pinOrUnpinQuestion,
+  archiveQuestion
+};
+
+HomePage.defaultProps = {
+  auth: {}
+};
 
 HomePage.propTypes = {
   fetchAllQuestions: PropTypes.func.isRequired,
+  auth: PropTypes.shape({ isLoggedIn: PropTypes.bool }),
+  pinOrUnpinQuestion: PropTypes.func.isRequired,
+  archiveQuestion: PropTypes.func.isRequired,
   questions: PropTypes.shape({
     data: PropTypes.array,
     nextCursor: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

@@ -1,4 +1,9 @@
-import { FETCH_QUESTIONS_FAILURE, FETCH_QUESTIONS_SUCCESS, QUESTIONS_LOADING_MORE } from '../actions/actionTypes';
+import {
+  FETCH_QUESTIONS_FAILURE,
+  FETCH_QUESTIONS_SUCCESS,
+  QUESTIONS_LOADING_MORE,
+  QUESTION_ARCHIVED
+} from '../actions/actionTypes';
 import initialState from '../store/initialState';
 
 const { questions } = initialState;
@@ -35,6 +40,13 @@ const questionsReducer = (state = questions, action) => {
         hasMore: payload.hasMore != null ? payload.hasMore : true,
         loadingMore: false
       };
+    case QUESTION_ARCHIVED: {
+      const id = payload;
+      const data = Array.isArray(state.data)
+        ? state.data.filter((q) => q.id != null && String(q.id) !== String(id))
+        : state.data;
+      return { ...state, data };
+    }
     default:
       return state;
   }

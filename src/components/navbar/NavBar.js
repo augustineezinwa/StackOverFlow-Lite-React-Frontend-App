@@ -7,7 +7,27 @@ export class NavBar extends Component {
     super(props);
     this.state = {
     }
+    this.navRef = React.createRef();
+    this.navCheckRef = React.createRef();
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleDocumentClick = this.handleDocumentClick.bind(this);
+  }
+
+  componentDidMount() {
+    document.addEventListener('click', this.handleDocumentClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleDocumentClick);
+  }
+
+  handleDocumentClick(e) {
+    const nav = this.navRef.current;
+    const check = this.navCheckRef.current;
+    if (!nav || !check || !check.checked) return;
+    if (!nav.contains(e.target)) {
+      check.checked = false;
+    }
   }
 
   handleLogout() {
@@ -18,7 +38,7 @@ export class NavBar extends Component {
   render() {
     const { isLoggedIn, isDarkMode, onThemeToggle } = this.props;
     return (
-      <div className="nav" id="navbar">
+      <div className="nav" id="navbar" ref={this.navRef}>
         <div className="nav-header">
           <div className="nav-title">
             StackOverFlow-Lite
@@ -31,7 +51,7 @@ export class NavBar extends Component {
             <span />
           </label>
         </div>
-        <input type="checkbox" id="nav-check" />
+        <input type="checkbox" id="nav-check" ref={this.navCheckRef} />
         <div className="nav-links">
           <NavLink to="/" id="homeLink">Home</NavLink>
           <NavLink to="/ask" id="askLink">AskQuestion</NavLink>

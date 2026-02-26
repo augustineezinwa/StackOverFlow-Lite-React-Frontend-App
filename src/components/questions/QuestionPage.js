@@ -52,7 +52,7 @@ export class QuestionPage extends Component {
 
   render() {
     const { answer } = this.state;
-    const { question, users } = this.props;
+    const { match, question, users } = this.props;
     if (question.answers && users.length) {
       const calcVotes = (votes) => {
         let i = 0;
@@ -67,42 +67,37 @@ export class QuestionPage extends Component {
                 <div className="question-card">
                   <h2>{question.questionTitle}</h2>
                   <div className="underline">&nbsp;</div>
-                  <div className="row">
-                    <div className="col-5">
-                      {(question.questionDescription || '').trim().startsWith('<')
-                        ? (
-                          <div
-                            className="rich-text-content"
-                            dangerouslySetInnerHTML={{ __html: question.questionDescription }}
-                          />
-                        )
-                        : (
-                          <span className="rich-text-content">{question.questionDescription}</span>
-                        )}
-                      <div className="mt-4 ft">
-                        Asked by
+                  <div className="question-detail-body">
+                    {(question.questionDescription || '').trim().startsWith('<')
+                      ? (
+                        <div
+                          className="rich-text-content"
+                          dangerouslySetInnerHTML={{ __html: question.questionDescription }}
+                        />
+                      )
+                      : (
+                        <span className="rich-text-content">{question.questionDescription}</span>
+                      )}
+                    <div className="question-detail-votes-row">
+                      <span className="question-detail-vote-item">
+                        {calcVotes('upvotes')}
                         {' '}
-                        {findData(users, 'id', question.userId, 'fullName')}
+                        upvotes
+                      </span>
+                      <span className="question-detail-vote-item">
+                        {calcVotes('downvotes')}
                         {' '}
-                        &nbsp;
-                        {' '}
-                        <span className="darkgray">{question.time}</span>
-                      </div>
+                        downvotes
+                      </span>
                     </div>
-                    <div className="col-2">
-                      <div className="row wrap">
-                        <div className="col mb-1">
-                          {calcVotes('upvotes')}
-                          {' '}
-                          upvotes
-
-                        </div>
-                        <div className="col mb-1">
-                          {calcVotes('downvotes')}
-                          {' '}
-                          downvotes
-                        </div>
-                      </div>
+                    <div className="mt-4 ft question-detail-asked-by">
+                      Asked by
+                      {' '}
+                      {findData(users, 'id', question.userId, 'fullName')}
+                      {' '}
+                      &nbsp;
+                      {' '}
+                      <span className="darkgray">{question.time}</span>
                     </div>
                   </div>
 
@@ -131,25 +126,35 @@ export class QuestionPage extends Component {
                   <div className="underline">&nbsp;</div>
 
                   {question.answers && (
-                    question.answers.map(x => (
-                      <AnswerList
-                      key={x.id}
-                      answer={x.answer}
-                      upvotes={x.upvotes}
-                      downvotes={x.downvotes}
-                      time={x.time}
-                      date={x.date}
-                      name={findData(users, 'id', x.userId, 'fullName')}
-                     />
-                    ))
+                    question.answers.map((x) => {
+                      const answerUser = users.find(u => u.id != null && +u.id === +x.userId);
+                      const authorName = answerUser ? (answerUser.fullName || answerUser.name || '') : '';
+                      const authorPhoto = answerUser
+                        ? (answerUser.photo || answerUser.photoUrl || answerUser.profilePhoto || '')
+                        : '';
+                      return (
+                        <AnswerList
+                          key={x.id}
+                          questionId={match.params.questionId}
+                          answerId={x.id}
+                          answer={x.answer}
+                          upvotes={x.upvotes}
+                          downvotes={x.downvotes}
+                          time={x.time}
+                          date={x.date}
+                          name={authorName}
+                          authorPhotoUrl={authorPhoto}
+                        />
+                      );
+                    })
                   )}
 
                   <div>&nbsp;</div>
                   <div>&nbsp;</div>
 
-                  <form className="" method="POST" onSubmit={this.handleOnSubmit}>
+                  <form className="add-answer-form" method="POST" onSubmit={this.handleOnSubmit}>
 
-                    <label htmlFor="answer"><b>Add an answer</b></label>
+                    <label htmlFor="answer" className="add-answer-label"><b>Add an answer</b></label>
                     <RichTextEditor
                       value={answer}
                       placeholder="Write your answer… You can use bold, lists, and insert images."

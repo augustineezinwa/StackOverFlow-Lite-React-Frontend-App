@@ -8,6 +8,7 @@ import notificationsReducer from './notifcationsReducer';
 import answersReducer from './postAnswersReducer';
 import profileReducer from './profileReducer';
 import userQuestionsReducer from './userQuestionsReducer';
+import pinnedQuestionsReducer from './pinnedQuestionsReducer';
 
 const indexReducer = combineReducers({
   questions: questionsReducer,
@@ -18,7 +19,8 @@ const indexReducer = combineReducers({
   auth: authReducer,
   answers: answersReducer,
   profile: profileReducer,
-  userQuestions: userQuestionsReducer
+  userQuestions: userQuestionsReducer,
+  pinnedQuestions: pinnedQuestionsReducer
 });
 
 export default indexReducer;
