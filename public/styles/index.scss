@@ -2650,6 +2650,88 @@ body.dark-mode .no-questions-feed-actions button:hover {
   width: 22rem;
 }
 
+/* Ask page form + category: same on all viewports */
+.ask-page-box {
+  padding: 1.25rem 1rem;
+  box-sizing: border-box;
+}
+
+.ask-page-box label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.9375rem;
+}
+
+.ask-page-box input[type="text"] {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+.ask-page-category-row {
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+.ask-page-category-row label {
+  display: block;
+  margin-bottom: 0.6rem;
+}
+
+.ask-page-box select.ask-page-category-select,
+.ask-page-box .ask-page-category-select {
+  display: block !important;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 8px 20px !important;
+  font-size: 16px !important;
+  font-family: inherit;
+  border-radius: 2px !important;
+  border: 1px solid lightgrey !important;
+  background-color: white !important;
+  color: darkgray !important;
+  cursor: pointer;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 20px center !important;
+  background-size: 12px !important;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.ask-page-box select.ask-page-category-select:hover,
+.ask-page-box .ask-page-category-select:hover {
+  border-color: #999 !important;
+}
+
+.ask-page-box select.ask-page-category-select:focus,
+.ask-page-box .ask-page-category-select:focus {
+  outline: 2px solid #999;
+  outline-offset: 2px;
+}
+
+.ask-page-box select.ask-page-category-select:disabled,
+.ask-page-box .ask-page-category-select:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+body.dark-mode .ask-page-box select.ask-page-category-select,
+body.dark-mode .ask-page-box .ask-page-category-select {
+  background-color: transparent !important;
+  color: #b0b8c0 !important;
+  border-color: #6b7280 !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E") !important;
+}
+
+body.dark-mode .ask-page-box select.ask-page-category-select:hover:not(:disabled),
+body.dark-mode .ask-page-box .ask-page-category-select:hover:not(:disabled) {
+  border-color: #9ca3af !important;
+}
 
 @media screen and (max-width: 768px) {
   .alertPopup {

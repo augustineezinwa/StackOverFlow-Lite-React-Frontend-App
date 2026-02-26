@@ -12,10 +12,14 @@ export const postQuestionFailure = errors => ({
   type: POST_QUESTION_FAILURE, payload: { errors }
 });
 
-export const postAQuestion = (questionTitle, questionDescription, imageUrl, history) => (dispatch) => {
+export const postAQuestion = (questionTitle, questionDescription, imageUrl, history, categoryId = '') => (dispatch) => {
+  const resolvedCategoryId = (categoryId != null && String(categoryId).trim() !== '')
+    ? String(categoryId).trim()
+    : '';
   const payload = {
     questionTitle,
     questionDescription,
+    categoryId: resolvedCategoryId,
   };
   if (imageUrl) payload.imageUrl = imageUrl;
 

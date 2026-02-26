@@ -1,17 +1,50 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { authUserLogout } from '../../actions/authUserActions';
+import { fetchQuestions } from '../../actions/fetchQuestionsActions';
+
+function getSearchFromLocation(location) {
+  if (!location || !location.search) return '';
+  const params = new URLSearchParams(location.search);
+  return params.get('search') || '';
+}
+
 export class NavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-    }
+      searchInput: getSearchFromLocation(props.location)
+    };
     this.navRef = React.createRef();
     this.navCheckRef = React.createRef();
     this.handleLogout = this.handleLogout.bind(this);
     this.handleNavItemClick = this.handleNavItemClick.bind(this);
     this.handleDocumentClick = this.handleDocumentClick.bind(this);
+    this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    const nextSearch = getSearchFromLocation(this.props.location);
+    if (getSearchFromLocation(prevProps.location) !== nextSearch) {
+      this.setState({ searchInput: nextSearch });
+    }
+  }
+
+  handleSearchChange(e) {
+    this.setState({ searchInput: e.target.value });
+  }
+
+  handleSearchSubmit(e) {
+    e.preventDefault();
+    const { history, fetchAllQuestions } = this.props;
+    const { searchInput } = this.state;
+    const query = (searchInput || '').trim();
+    const searchParams = query ? `?search=${encodeURIComponent(query)}` : '';
+    history.push(`/${searchParams}`);
+    fetchAllQuestions({ limit: 10, search: query || undefined });
+    this.handleNavItemClick();
   }
 
   componentDidMount() {
@@ -79,11 +112,17 @@ export class NavBar extends Component {
             </label>
           </div>
 
-          <div className="search-bar">
-            <input id="searchBox" type="search" />
-            {' '}
-            <button type="button" id="searchButton" onClick={this.handleNavItemClick}>Search</button>
-          </div>
+          <form className="search-bar" onSubmit={this.handleSearchSubmit}>
+            <input
+              id="searchBox"
+              type="search"
+              value={this.state.searchInput}
+              onChange={this.handleSearchChange}
+              placeholder="Search questions…"
+              aria-label="Search questions"
+            />
+            <button type="submit" id="searchButton">Search</button>
+          </form>
 
           <NavLink to="/signup" id="signupLink" style={{ display: `${isLoggedIn ? 'none' : ''} ` }} onClick={this.handleNavItemClick}>signup</NavLink>
           <NavLink to="/login" id="loginLink" style={{ display: `${isLoggedIn ? 'none' : ''} ` }} onClick={this.handleNavItemClick}>login</NavLink>
@@ -109,12 +148,13 @@ const mapStateToProps = state => ({
 });
 
 const mapActionToProps = {
-  logOutUser: authUserLogout
-}
+  logOutUser: authUserLogout,
+  fetchAllQuestions: fetchQuestions
+};
 
 NavBar.defaultProps = {
   isDarkMode: false,
   onThemeToggle: () => {}
 };
 
-export default connect(mapStateToProps, mapActionToProps)(NavBar);
+export default withRouter(connect(mapStateToProps, mapActionToProps)(NavBar));

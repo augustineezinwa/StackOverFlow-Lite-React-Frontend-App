@@ -15,6 +15,12 @@ import soldiersImage from '../../../public/images/soliders.webp';
 
 const CATEGORY_STORAGE_KEY = 'stackoverflow_lite_selected_category';
 
+function getSearchFromLocation(location) {
+  if (!location || !location.search) return '';
+  const params = new URLSearchParams(location.search);
+  return params.get('search') || '';
+}
+
 const heroSlides = [
   {
     image: warplaneImage,
@@ -70,10 +76,15 @@ export class HomePage extends Component {
   }
 
   componentDidMount() {
-    const { fetchAllQuestions } = this.props;
+    const { fetchAllQuestions, location } = this.props;
     const { selectedCategory } = this.state;
+    const search = getSearchFromLocation(location);
     this.isComponentMounted = true;
-    fetchAllQuestions({ limit: 10, category: selectedCategory || undefined });
+    fetchAllQuestions({
+      limit: 10,
+      category: selectedCategory || undefined,
+      search: search || undefined
+    });
     this.preloadUpcomingSlides(0);
     this.slideInterval = setInterval(this.advanceSlide, 2000);
     this.observer = new IntersectionObserver(
@@ -86,7 +97,19 @@ export class HomePage extends Component {
     );
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    const { location, fetchAllQuestions } = this.props;
+    const { selectedCategory } = this.state;
+    const { location: prevLocation } = prevProps;
+    const prevSearch = getSearchFromLocation(prevLocation);
+    const nextSearch = getSearchFromLocation(location);
+    if (prevSearch !== nextSearch) {
+      fetchAllQuestions({
+        limit: 10,
+        category: selectedCategory || undefined,
+        search: nextSearch || undefined
+      });
+    }
     if (this.observer && this.sentinelRef.current) {
       this.observer.disconnect();
       this.observer.observe(this.sentinelRef.current);
@@ -100,16 +123,19 @@ export class HomePage extends Component {
   }
 
   handlePinQuestion(id) {
+    /* eslint-disable-next-line react/destructuring-assignment */
     this.props.pinOrUnpinQuestion(id, true);
   }
 
   handleArchiveQuestion(id) {
+    /* eslint-disable-next-line react/destructuring-assignment */
     this.props.archiveQuestion(id, true);
   }
 
   loadMoreIfNeeded() {
-    const { fetchAllQuestions, questions } = this.props;
+    const { fetchAllQuestions, questions, location } = this.props;
     const { selectedCategory } = this.state;
+    const search = getSearchFromLocation(location);
     const list = questions.data || [];
     const { nextCursor, hasMore, loadingMore } = questions;
     if (loadingMore || !hasMore) return;
@@ -120,6 +146,7 @@ export class HomePage extends Component {
       limit: 10,
       cursor,
       category: selectedCategory || undefined,
+      search: search || undefined,
       append: true
     });
   }
@@ -327,7 +354,11 @@ HomePage.propTypes = {
     hasMore: PropTypes.bool,
     loadingMore: PropTypes.bool
   }).isRequired,
+  location: PropTypes.shape({ search: PropTypes.string })
 };
 
+HomePage.defaultProps = {
+  location: {}
+};
 
 export default connect(mapStateToProps, mapActionsToProps)(HomePage);

@@ -12,7 +12,9 @@ export const fetchQuestonFailure = errors => ({
   type: FETCH_QUESTIONS_FAILURE, payload: { errors }
 });
 
-export const fetchQuestions = ({ limit = DEFAULT_LIMIT, cursor, category, append = false } = {}) => (dispatch) => {
+export const fetchQuestions = ({
+  limit = DEFAULT_LIMIT, cursor, category, search, append = false
+} = {}) => (dispatch) => {
   if (append) {
     dispatch({ type: QUESTIONS_LOADING_MORE, payload: true });
   } else {
@@ -25,6 +27,9 @@ export const fetchQuestions = ({ limit = DEFAULT_LIMIT, cursor, category, append
   }
   if (category != null && category !== '') {
     params.set('category', String(category));
+  }
+  if (search != null && String(search).trim() !== '') {
+    params.set('search', String(search).trim());
   }
   const queryString = params.toString() ? `?${params.toString()}` : '';
   const url = `${process.env.APP_BASE_URL}/questions${queryString}`;
