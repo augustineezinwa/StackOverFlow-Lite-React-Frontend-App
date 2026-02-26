@@ -72,14 +72,21 @@ export class SignupPage extends Component {
     if (isLoggedIn) history.push('/');
     return (
       <Fragment>
-        <div className="container image-background ask-bg " id="ask-bg" style={{ margin: '0 auto' }}>
-          <div className="row">
+        <div className="ask-page container image-background ask-bg" id="ask-bg" style={{ margin: '0 auto' }}>
+          <div className="row ask-page-row">
 
-            <div className="col" style={{ marginTop: '18%' }}>
-              <h1 style={{ color: 'white', textAlign: 'center', zIndex: 10 }}>Welcome to StackOverFlow-Lite</h1>
+            <div className="col adjust ask-page-welcome" style={{ marginTop: '18%' }}>
+              <div className="auth-hero">
+                <h1 className="auth-hero-title" style={{ zIndex: 10 }}>
+                  Get answers faster. Grow every day.
+                </h1>
+                <p className="auth-hero-subtitle">
+                  Join StackOverFlow-Lite to ask focused questions, get clear answers, and build a searchable library of what you’ve learned.
+                </p>
+              </div>
             </div>
-            <div className="col">
-              <div className="login-box">
+            <div className="col ask-page-form-col">
+              <div className="login-box ask-page-box">
                 <h2>Signup</h2>
                 <form className="" method="POST" onSubmit={this.handleSubmit}>
                   <label htmlFor="email"><b>Enter Full Name</b></label>

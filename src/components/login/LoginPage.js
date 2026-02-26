@@ -33,13 +33,20 @@ export class LoginPage extends Component {
     return (
 
       <Fragment>
-        <div className="container image-background ask-bg" style={{ margin: '0 auto' }}>
-          <div className="row">
-            <div className="col" style={{ marginTop: '18%' }}>
-              <h1 style={{ color: 'white', textAlign: 'center' }}>Welcome to StackOverFlow-Lite</h1>
+        <div className="ask-page container image-background ask-bg" style={{ margin: '0 auto' }}>
+          <div className="row ask-page-row">
+            <div className="col adjust ask-page-welcome">
+              <div className="auth-hero">
+                <h1 className="auth-hero-title">
+                  Pick up where your questions left off.
+                </h1>
+                <p className="auth-hero-subtitle">
+                  Sign in to track your questions, follow expert answers, and never lose the solutions that matter to you.
+                </p>
+              </div>
             </div>
-            <div className="col">
-              <div className="login-box">
+            <div className="col ask-page-form-col">
+              <div className="login-box ask-page-box">
                 <h2>Login</h2>
                 <form className="" method="POST" onSubmit={this.handleSubmit}>
                   <label htmlFor="email"><b>Enter Email</b></label>

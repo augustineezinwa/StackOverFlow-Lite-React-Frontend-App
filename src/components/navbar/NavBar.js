@@ -10,6 +10,7 @@ export class NavBar extends Component {
     this.navRef = React.createRef();
     this.navCheckRef = React.createRef();
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleNavItemClick = this.handleNavItemClick.bind(this);
     this.handleDocumentClick = this.handleDocumentClick.bind(this);
   }
 
@@ -26,6 +27,13 @@ export class NavBar extends Component {
     const check = this.navCheckRef.current;
     if (!nav || !check || !check.checked) return;
     if (!nav.contains(e.target)) {
+      check.checked = false;
+    }
+  }
+
+  handleNavItemClick() {
+    const check = this.navCheckRef.current;
+    if (check && check.checked) {
       check.checked = false;
     }
   }
@@ -53,9 +61,9 @@ export class NavBar extends Component {
         </div>
         <input type="checkbox" id="nav-check" ref={this.navCheckRef} />
         <div className="nav-links">
-          <NavLink to="/" id="homeLink">Home</NavLink>
-          <NavLink to="/ask" id="askLink">AskQuestion</NavLink>
-          <NavLink to="/profile" id="profileLink" style={{ display: `${!isLoggedIn ? 'none' : ''} ` }}>My Profile</NavLink>
+          <NavLink to="/" id="homeLink" onClick={this.handleNavItemClick}>Home</NavLink>
+          <NavLink to="/ask" id="askLink" onClick={this.handleNavItemClick}>AskQuestion</NavLink>
+          <NavLink to="/profile" id="profileLink" style={{ display: `${!isLoggedIn ? 'none' : ''} ` }} onClick={this.handleNavItemClick}>My Profile</NavLink>
           <div className="theme-toggle-wrapper">
             <label className="theme-toggle-label" htmlFor="theme-toggle">
               Dark mode
@@ -74,12 +82,22 @@ export class NavBar extends Component {
           <div className="search-bar">
             <input id="searchBox" type="search" />
             {' '}
-            <button type="button" id="searchButton">Search</button>
+            <button type="button" id="searchButton" onClick={this.handleNavItemClick}>Search</button>
           </div>
 
-          <NavLink to="/signup" id="signupLink" style={{ display: `${isLoggedIn ? 'none' : ''} ` }}>signup</NavLink>
-          <NavLink to="/login" id="loginLink" style={{ display: `${isLoggedIn ? 'none' : ''} ` }}>login</NavLink>
-          <NavLink to="" id="logoutLink" style={{ display: `${isLoggedIn ? 'block' : ''} ` }} onClick={this.handleLogout}>Logout</NavLink>
+          <NavLink to="/signup" id="signupLink" style={{ display: `${isLoggedIn ? 'none' : ''} ` }} onClick={this.handleNavItemClick}>signup</NavLink>
+          <NavLink to="/login" id="loginLink" style={{ display: `${isLoggedIn ? 'none' : ''} ` }} onClick={this.handleNavItemClick}>login</NavLink>
+          <NavLink
+            to=""
+            id="logoutLink"
+            style={{ display: `${isLoggedIn ? 'block' : ''} ` }}
+            onClick={() => {
+              this.handleLogout();
+              this.handleNavItemClick();
+            }}
+          >
+            Logout
+          </NavLink>
         </div>
       </div>
     );
