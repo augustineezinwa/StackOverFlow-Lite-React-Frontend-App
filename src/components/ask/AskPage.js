@@ -45,15 +45,14 @@ class AskPage extends Component {
     return (
       <Fragment>
 
-        <div className="container image-background ask-bg">
+        <div className="ask-page container image-background ask-bg">
 
-          <div className="row">
-
-            <div className="col adjust">
-              <h1 className="header">Welcome to StackOverFlow-Lite</h1>
+          <div className="row ask-page-row">
+            <div className="col adjust ask-page-welcome">
+              <h1 className="header ask-page-title">Welcome to StackOverFlow-Lite</h1>
             </div>
-            <div className="col">
-              <div className="login-box">
+            <div className="col ask-page-form-col">
+              <div className="login-box ask-page-box">
                 <h2>Ask A Question</h2>
                 <form className="" method="POST" onSubmit={this.handleOnSubmit}>
                   <label htmlFor="title"><b>Enter Question Title</b></label>

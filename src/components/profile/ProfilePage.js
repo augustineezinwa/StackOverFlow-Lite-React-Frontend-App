@@ -174,17 +174,16 @@ class ProfilePage extends Component {
     const stats = this.getStats();
     return (
       <Fragment>
-        <div id="profileDisplay">
+        <div id="profileDisplay" className="profile-page">
           <div id="photoDisplay" />
-          <div className="container image-background profile-height" style={{ margin: '0 auto' }}>
+          <div className="profile-page-hero container image-background profile-height" style={{ margin: '0 auto' }}>
 
-            <div className="row ">
-
-              <div className="col mt-17">
-                <h1 style={{ color: 'white', textAlign: 'center' }}>Welcome to StackOverFlow-Lite</h1>
+            <div className="row profile-page-row">
+              <div className="col mt-17 profile-page-welcome">
+                <h1 className="profile-page-title" style={{ color: 'white', textAlign: 'center' }}>Welcome to StackOverFlow-Lite</h1>
               </div>
-              <div className="col">
-                <div className="profile-box">
+              <div className="col profile-page-form-col">
+                <div className="profile-box profile-page-box">
                   <div className="container">
                     <div className="col profile-header">My Profile</div>
                     <div className="profile-card-body">
@@ -320,10 +319,10 @@ class ProfilePage extends Component {
           </div>
         </div>
 
-        <div className="container profiledashboardfooter"><h3>Your Questions</h3></div>
+        <div className="container profiledashboardfooter profile-page-footer"><h3>Your Questions</h3></div>
 
-        <div id="userQuestionsDisplay" className="profile-questions-list">
-          <div className="container">
+        <div id="userQuestionsDisplay" className="profile-questions-list profile-page-questions">
+          <div className="container profile-page-questions-inner">
             {(userQuestions.data && userQuestions.data.length > 0) || userQuestions.loadingMore ? (
               <>
                 <div className="profile-questions-grid">
@@ -351,22 +350,15 @@ class ProfilePage extends Component {
               </>
             ) : (
               <div className="profile-questions-empty">
-                <div className="card">
-                  <div className="container">
-                    <div className="row mt-4 pd-1">
-                      <div className="col-2">
-                        <div className="symbol-display">
-                          <div className="alignSymbol">!</div>
-                        </div>
-                      </div>
-                      <div className="col-5">
-                        <div className="question">No questions yet. Ask your first question from the homepage.</div>
-                      </div>
-                    </div>
-                    <div className="col" style={{ textAlign: 'right' }}>
-                      <a href="/"><button type="answer">Go to Home</button></a>
-                    </div>
+                <div className="no-questions-feed card">
+                  <div className="no-questions-feed-icon" aria-hidden="true">
+                    <i className="fas fa-inbox" />
                   </div>
+                  <p className="no-questions-feed-message">No questions yet!</p>
+                  <p className="no-questions-feed-hint">Ask your first question from the homepage.</p>
+                  <a href="/ask" className="no-questions-feed-actions">
+                    <button type="button">Ask a question</button>
+                  </a>
                 </div>
               </div>
             )}

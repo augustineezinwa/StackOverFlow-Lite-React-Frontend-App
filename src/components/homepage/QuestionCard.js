@@ -9,7 +9,8 @@ class AvatarWithFallback extends React.Component {
 
   render() {
     const { photoUrl, initial } = this.props;
-    if (this.state.failed || !photoUrl) {
+    const { failed } = this.state;
+    if (failed || !photoUrl) {
       return <div className="alignSymbol">{initial}</div>;
     }
     return (
@@ -30,22 +31,62 @@ AvatarWithFallback.propTypes = {
 
 const QuestionCard = ({
   questionId, questionTitle, answerNumber,
-  totalUpVotes, totalDownVotes, imageUrl, photoUrl, askerName
+  totalUpVotes, totalDownVotes, imageUrl, photoUrl, askerName,
+  isOwner, onPin, onArchive
 }) => {
   let newQuestionTitle;
-  if (questionTitle.length > 2000) {
+  if (questionTitle && questionTitle.length > 2000) {
     newQuestionTitle = `${questionTitle.substr(0, 88)} ...`;
   }
   let answerNumberDisplay = `${answerNumber} Answer`;
   if (answerNumber > 1) answerNumberDisplay = `${answerNumber} Answers`;
   const hasPhotoUrl = photoUrl && typeof photoUrl === 'string' && photoUrl.trim().length > 0;
-  const initial = askerName && askerName.trim()
+  const askerInitial = askerName && askerName.trim()
     ? askerName.trim().charAt(0).toUpperCase()
-    : (questionTitle && questionTitle.trim() ? questionTitle.trim().charAt(0).toUpperCase() : '?');
+    : null;
+  const titleInitial = questionTitle && questionTitle.trim()
+    ? questionTitle.trim().charAt(0).toUpperCase()
+    : '?';
+  const initial = askerInitial || titleInitial;
   const hasCoverImage = imageUrl && imageUrl.trim();
+
+  function handlePin(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onPin) onPin(questionId);
+  }
+
+  function handleArchive(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onArchive) onArchive(questionId);
+  }
+
   return (
     <div className="question-grid-col">
       <div className={`card question-list-card${hasCoverImage ? ' question-list-card-has-image' : ''}`}>
+        <div className="question-list-card-actions">
+          {onPin && (
+            <button
+              type="button"
+              className="question-list-card-action question-list-card-action-pin"
+              onClick={handlePin}
+              aria-label="Pin question"
+            >
+              <i className="fas fa-thumbtack" aria-hidden="true" />
+            </button>
+          )}
+          {isOwner && onArchive && (
+            <button
+              type="button"
+              className="question-list-card-action question-list-card-action-archive"
+              onClick={handleArchive}
+              aria-label="Archive question"
+            >
+              <i className="fas fa-archive" aria-hidden="true" />
+            </button>
+          )}
+        </div>
         {hasCoverImage && (
           <>
             <div
@@ -76,8 +117,16 @@ const QuestionCard = ({
           <div className="row question-list-card-row3">
             <div className="question-list-card-meta">
               <span>{answerNumberDisplay}</span>
-              <span><i className="fas fa-thumbs-up" /> {totalUpVotes}</span>
-              <span><i className="fas fa-thumbs-down" /> {totalDownVotes}</span>
+              <span>
+                <i className="fas fa-thumbs-up" />
+                {' '}
+                {totalUpVotes}
+              </span>
+              <span>
+                <i className="fas fa-thumbs-down" />
+                {' '}
+                {totalDownVotes}
+              </span>
             </div>
             <NavLink to={`/question/${questionId}`} className="question-list-card-view-wrap">
               <button className="viewButton" key={questionId} type="answer">View</button>
@@ -92,18 +141,24 @@ const QuestionCard = ({
 export default QuestionCard;
 
 QuestionCard.propTypes = {
-  questionId: PropTypes.number.isRequired,
+  questionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   questionTitle: PropTypes.string.isRequired,
   answerNumber: PropTypes.number.isRequired,
   totalDownVotes: PropTypes.number.isRequired,
   totalUpVotes: PropTypes.number.isRequired,
   imageUrl: PropTypes.string,
   photoUrl: PropTypes.string,
-  askerName: PropTypes.string
+  askerName: PropTypes.string,
+  isOwner: PropTypes.bool,
+  onPin: PropTypes.func,
+  onArchive: PropTypes.func
 };
 
 QuestionCard.defaultProps = {
   imageUrl: '',
   photoUrl: '',
-  askerName: ''
+  askerName: '',
+  isOwner: false,
+  onPin: null,
+  onArchive: null
 };
