@@ -44,7 +44,10 @@ test('fetch question async action should trigger the following set of actions', 
       ]
     }
   };
-  fetchMock.get(`${process.env.APP_BASE_URL}/questions`, recievedData);
+  fetchMock.get(
+    (url) => url && url.startsWith(`${process.env.APP_BASE_URL}/questions`),
+    recievedData
+  );
 
   const store = mockStore({});
 
@@ -63,11 +66,11 @@ test('fetch question async action should trigger the following set of actions', 
     type: 'LOADING_FALSE'
   },
   {
-    payload: {
+    type: 'FETCH_QUESTIONS_SUCCESS',
+    payload: expect.objectContaining({
       data: recievedData.data.questions,
       append: false
-    },
-    type: 'FETCH_QUESTIONS_SUCCESS'
+    })
   }
   ];
   return store.dispatch(fetchQuestions())
@@ -93,7 +96,7 @@ test('fetch question success actions should trigger the expected action', () => 
   ];
   expect(fetchQuestionSuccess(data)).toEqual({
     type: 'FETCH_QUESTIONS_SUCCESS',
-    payload: { data, append: false }
+    payload: { data, append: false, nextCursor: null, hasMore: true }
   });
 });
 

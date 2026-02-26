@@ -2,9 +2,16 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { HomePage } from '../../../../src/components/homepage/HomePage';
 
+const questionsSlice = (data) => ({
+  data: Array.isArray(data) ? data : [],
+  nextCursor: null,
+  hasMore: true,
+  loadingMore: false
+});
+
 const setup = (data) => {
   const props = {
-    questions: data,
+    questions: questionsSlice(data),
     fetchAllQuestions: jest.fn()
   };
   const shallowedComponent = shallow(<HomePage {...props} />);

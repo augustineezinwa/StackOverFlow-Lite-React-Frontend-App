@@ -2,6 +2,7 @@ import { POST_QUESTION_SUCCESS, POST_QUESTION_FAILURE } from './actionTypes';
 import appLoader from './loaderActions';
 import sendNotification from './notificationsActions';
 import obtainToken from '../utils/obtainToken';
+import { authFetch } from '../utils/apiClient';
 
 export const postQuestionSuccess = data => ({
   type: POST_QUESTION_SUCCESS, payload: { data }
@@ -11,18 +12,21 @@ export const postQuestionFailure = errors => ({
   type: POST_QUESTION_FAILURE, payload: { errors }
 });
 
-export const postAQuestion = (questionTitle, questionDescription, history) => (dispatch) => {
+export const postAQuestion = (questionTitle, questionDescription, imageUrl, history) => (dispatch) => {
+  const payload = {
+    questionTitle,
+    questionDescription,
+  };
+  if (imageUrl) payload.imageUrl = imageUrl;
+
   dispatch(appLoader(true, 'We are sending in your question'));
-  return fetch(`${process.env.APP_BASE_URL}/questions`, {
+  return authFetch(`${process.env.APP_BASE_URL}/questions`, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json',
       authorization: obtainToken()
     },
-    body: JSON.stringify({
-      questionTitle,
-      questionDescription,
-    })
+    body: JSON.stringify(payload)
   })
     .then(res => res.json(), err => dispatch(appLoader(false, err.message)))
     .then((data) => {

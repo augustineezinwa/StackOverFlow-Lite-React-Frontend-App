@@ -2,11 +2,22 @@ import React, { Fragment } from 'react';
 
 const AnswerList = ({
   answer, upvotes, downvotes, time, date, id, name
-}) => (
+}) => {
+  const isHtml = (answer || '').trim().startsWith('<');
+  return (
     <Fragment>
       <div className="row" key={id}>
         <div className="col-5 pd-1 text">
-          {answer}
+          {isHtml
+            ? (
+              <div
+                className="rich-text-content"
+                dangerouslySetInnerHTML={{ __html: answer }}
+              />
+            )
+            : (
+              <span className="rich-text-content">{answer}</span>
+            )}
           <div className="row wrap mt-4">
             <div className="col">
               <div className="ft">
@@ -96,6 +107,6 @@ const AnswerList = ({
       <div className="underline">&nbsp;</div>
     </Fragment>
   );
+};
 
 export default AnswerList;
-
